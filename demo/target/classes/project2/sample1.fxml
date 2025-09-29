@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="topLabel" fx:id="topLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.LogInController">
+   <children>
+      <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Pane id="PaneLabel" fx:id="PaneLabel" layoutX="65.0" layoutY="51.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TextField id="usernameField" fx:id="usernameText" layoutX="353.0" layoutY="175.0" promptText="username" />
+            <PasswordField id="passwordField" fx:id="passwordText" layoutX="353.0" layoutY="221.0" promptText="password" />
+            <Label id="otherLabel" layoutX="353.0" layoutY="102.0" prefHeight="49.0" prefWidth="155.0" text="Enter Log In Credentials Below" wrapText="true" />
+            <Separator id="SepLabel" layoutX="303.0" layoutY="24.0" orientation="VERTICAL" prefHeight="376.0" prefWidth="4.0" />
+            <Label id="PharmLabel" layoutX="53.0" layoutY="85.0" prefHeight="194.0" prefWidth="149.0" text="Pharmacy Management System " textFill="#2699a1" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Button id="EnterCreds" fx:id="LogInButton" layoutX="450.0" layoutY="267.0" mnemonicParsing="false" onAction="#doSomething" text="Enter" />
+            <Label fx:id="wrongUsernameWarning" layoutX="353.0" layoutY="305.0" prefHeight="42.0" prefWidth="140.0" text="Wrong username or password!" textFill="#b21818" visible="false" wrapText="true" />
+         </children></Pane>
+   </children>
+</AnchorPane>
