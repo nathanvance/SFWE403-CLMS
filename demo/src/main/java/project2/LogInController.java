@@ -33,24 +33,36 @@ public class LogInController {
 
     @FXML
     void doSomething(ActionEvent event) throws IOException  {
-        String usernameInput = usernameText.getText();
+        String usernameInput = usernameText.getText().trim();
         String passwordInput = passwordText.getText();
-        System.out.print("user input recognized" + usernameInput);
+        
+        // If already locked, tell user and exit early
+        if (BackEnd.isLocked(usernameInput)) {
+            long secs = BackEnd.lockoutSecondsRemaining(usernameInput);
+            wrongUsernameWarning.setText("Account locked. Try again in " + secs + " seconds.");
+            wrongUsernameWarning.setVisible(true);
+            return;
+        }
+    
+        // Attempt login using lockout logic in BackEnd
+        boolean ok = BackEnd.checkLoginWithLockout(usernameInput, passwordInput);
+        if (ok) {
+            wrongUsernameWarning.setVisible(false);
+            App.setRoot("secondary");
+            return;
+        }
 
-        if (BackEnd.checkLogin(usernameInput, passwordInput)) {
-        App.setRoot("secondary");
+        // Failed login either locked now or remaining attempts
+        if (BackEnd.isLocked(usernameInput)) {
+            long secs = BackEnd.lockoutSecondsRemaining(usernameInput);
+            wrongUsernameWarning.setText("Account locked.Try again in " + secs + " seconds.");
+            wrongUsernameWarning.setVisible(true);
         }
         else {
-            System.out.print("wrong username");
+            int attempts = BackEnd.remainingAttempts(usernameInput);
+            wrongUsernameWarning.setText("Wrong username or password. " + attempts + "attempt" + (attempts == 1 ? "" : "s") + " remaining.");
             wrongUsernameWarning.setVisible(true);
-            //set the label "wrong username" visbible
         }
-
-        
-
-
     }
     
-
-
 }

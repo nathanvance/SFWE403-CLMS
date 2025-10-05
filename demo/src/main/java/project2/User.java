@@ -6,6 +6,47 @@ public class User {
     private String name;
     private String age;
 
+    /* Added for lockout and roles */
+    // number of consecutive failed login attempts
+    private int failedAttempts = 0;
+    // Account lockout time
+    private long lockedUntil = 0L;
+    // User role ("manager", "staff", "patient")
+    private String role = "staff"; // default role is "staff"
+
+    // Getters and setters for new fields
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+    public long getLockedUntil() {
+        return lockedUntil;
+    }
+    public void setLockedUntil(long lockedUntil) {
+        this.lockedUntil = lockedUntil;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isAccountLocked() {
+        return lockedUntil > System.currentTimeMillis();
+    }
+
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
+    
+    public void resetFailures() {
+        this.failedAttempts = 0;
+        this.lockedUntil = 0L;
+    }
+
     //TO DO: add a user access field for user permissions. 
     //Before adding a prescription we need to make sure the account is created first and in the list
     //We need to have a medications class with fields for quantity, drug name...
