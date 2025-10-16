@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 
 object LoginManager {
-    private val loginHolder = File("demo/src/data/user_pass.csv")
+    val loginHolder = File("demo/src/data/user_pass.csv")
     private var logins = parseFile();
+    private var locked = parseLocked();
 
     fun register(username: String, password: String): Boolean {
         if (logins.containsKey(username)) {
@@ -14,17 +15,18 @@ object LoginManager {
         }
 
         val hash = PasswordHash.hashPWD(password.toCharArray());
-        appendToFile(username, hash);
+        FileUtils.appendToFile(loginHolder, mutableListOf("$username,$hash,Patient"));
         logins = parseFile();
 
-        println("Successfully register user `$username`");
+        println("Successfully registered user `$username`");
         return true;
     }
 
-    fun verifyLogin(username: String, password: String): Boolean {
-        val stored = logins[username] ?: return false;
+    fun verifyLogin(username: String, password: String): String {
+        if (locked[username] == true) return "locked"
+        val stored = logins[username] ?: return "false";
 
-        return PasswordHash.verifyPWD(password.toCharArray(), stored);
+        return if (PasswordHash.verifyPWD(password.toCharArray(), stored)) "true" else "false";
     }
 
     fun passwordChecks(username: String, password: String, confirmation: String): List<String> {
@@ -38,15 +40,15 @@ object LoginManager {
         }
     }
 
-    private fun parseFile(file: File = loginHolder): MutableMap<String, String> {
-        val lines = file.readLines();
+    private fun parseFile(): MutableMap<String, String> {
+        val lines = loginHolder.readLines();
         val map = mutableMapOf<String, String>();
 
         for (line in lines) {
             if (line.contains("username,hash")) continue;
 
             val pair = line.split(",");
-            if (pair.size != 2) continue;
+            if (pair.size < 2) continue;
 
             map[pair[0]] = pair[1];
         }
@@ -54,9 +56,22 @@ object LoginManager {
         return map;
     }
 
-    private fun appendToFile(username: String, hash: String) {
-        FileWriter(loginHolder, true).use { writer ->
-            writer.appendLine("$username,$hash")
+    private fun parseLocked(): MutableMap<String, Boolean> {
+        val lines = loginHolder.readLines();
+        val map = mutableMapOf<String, Boolean>();
+
+        for (line in lines) {
+            if (line.contains("username,hash")) continue;
+
+            val parts = line.split(",");
+            if ("LOCKED ACCOUNT" !in parts) {
+                map[parts[0]] = false
+                continue;
+            };
+            map[parts[0]] = true;
         }
+
+        return map;
     }
+
 }
