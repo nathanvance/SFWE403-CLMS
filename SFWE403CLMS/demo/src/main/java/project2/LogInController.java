@@ -1,19 +1,14 @@
 package project2;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import project2.LoginManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 
 public class LogInController {
 
@@ -30,30 +25,46 @@ public class LogInController {
     @FXML
     private Label loginWarnings, registerWarnings;
 
+    private List<TextInputControl> loginFields;
+    private List<TextInputControl> registerFields;
+
     @FXML
     public void initialize() {
-        usernameText.setOnKeyReleased(e -> loginWarnings.setVisible(false));
-        passwordText.setOnKeyReleased(e -> loginWarnings.setVisible(false));
+        loginFields = Arrays.asList(usernameText, passwordText);
+        registerFields = Arrays.asList(regUsername, regPassword, regPasswordConfirmation);
 
-        regUsername.setOnKeyReleased(e -> registerWarnings.setVisible(false));
-        regPassword.setOnKeyReleased(e -> registerWarnings.setVisible(false));
-        regPasswordConfirmation.setOnKeyReleased(e -> registerWarnings.setVisible(false));
+        for (TextInputControl field : loginFields) {
+            enterHandler(field);
+        }
+        for (TextInputControl field : registerFields) {
+            enterHandler(field);
+        }
     }
 
     @FXML
     void doLogin(ActionEvent event) throws IOException {
+        loginWarnings.setVisible(false);
         String usernameInput = usernameText.getText();
         String passwordInput = passwordText.getText();
         System.out.println("user input recognized" + usernameInput);
 
-        if (LoginManager.INSTANCE.verifyLogin(usernameInput, passwordInput)) {
-            App.setRoot("secondary");
-        } else {
-            System.out.println("wrong username");
-            loginWarnings.setVisible(true);
-            //set the label "wrong username" visbible
-        }
+        String result = LoginManager.INSTANCE.verifyLogin(usernameInput, passwordInput);
 
+        switch (result) {
+            case "true":
+                App.setRoot("secondary");
+                break;
+            case "false":
+                System.out.println("wrong username");
+                loginWarnings.setText("Username or password incorrect.");
+                loginWarnings.setVisible(true);
+                break;
+            case "locked":
+                loginWarnings.setText("Account locked. Please contact an administrator.");
+                loginWarnings.setVisible(true);
+                break;
+        }
+        
     }
 
     @FXML
@@ -70,6 +81,7 @@ public class LogInController {
 
     @FXML
     void doRegister(ActionEvent event) {
+        registerWarnings.setVisible(false);
         String user = regUsername.getText();
         String pass = regPassword.getText();
         String confirmation = regPasswordConfirmation.getText();
@@ -80,13 +92,35 @@ public class LogInController {
             showLoginPanel(null); // return to login after successful registration
         } else {
             String warnings = "";
-            for (String error: errors) {
+            for (String error : errors) {
                 warnings += error + "\n";
             }
 
             registerWarnings.setText(warnings);
             registerWarnings.setVisible(true);
         }
+    }
+
+    private void enterHandler(TextInputControl field) {
+        loginFields = Arrays.asList(usernameText, passwordText);
+        registerFields = Arrays.asList(regUsername, regPassword, regPasswordConfirmation);
+
+        field.setOnKeyReleased(e -> {
+            loginWarnings.setVisible(false);
+            registerWarnings.setVisible(false);
+
+            if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                if (loginFields.contains(field))
+                    try {
+                        doLogin(null);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                if (registerFields.contains(field)) {
+                    doRegister(null);
+                }
+            }
+        });
     }
 }
 
