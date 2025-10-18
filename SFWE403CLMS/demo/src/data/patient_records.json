@@ -1,0 +1,88 @@
+{
+  "patients": {
+    "mia_fernandez": {
+      "insurance": "Premium Plus",
+      "healthRecords": [{
+        "date": "2024-01-22",
+        "summary": "Follow-up visit",
+        "notes": "Physical therapy improving mobility. Continue sessions."
+      }],
+      "pharmacist": "Dr. Samuel Chen",
+      "prescriptions": [{
+        "quantity": 400,
+        "name": "Ibuprofen"
+      }]
+    },
+    "olivia_wright": {
+      "insurance": "Family Shield",
+      "healthRecords": [{
+        "date": "2024-02-05",
+        "summary": "Prenatal visit",
+        "notes": "Second trimester check-in. Ultrasound normal."
+      }],
+      "pharmacist": "Dr. Sara Patel",
+      "prescriptions": [{
+        "quantity": 1,
+        "name": "Prenatal Multivitamin"
+      }]
+    },
+    "asdf": {
+      "insurance": "Standard Health",
+      "healthRecords": [
+        {
+          "date": "2024-03-14",
+          "summary": "Annual physical exam",
+          "notes": "Vitals stable. Recommended increased cardio exercise."
+        },
+        {
+          "date": "2023-09-02",
+          "summary": "Telehealth consultation",
+          "notes": "Reviewed allergy symptoms. Adjusted medication."
+        }
+      ],
+      "pharmacist": "Dr. Priya Wallace",
+      "prescriptions": [
+        {
+          "quantity": 0.005,
+          "name": "Novocaine"
+        },
+        {
+          "quantity": 1,
+          "name": "Fentanyl"
+        }
+      ]
+    },
+    "jackson.reed": {
+      "insurance": "Standard Health",
+      "healthRecords": [
+        {
+          "date": "2024-04-18",
+          "summary": "Follow-up for knee surgery",
+          "notes": "Recovery progressing well. Continue physical therapy twice a week."
+        },
+        {
+          "date": "2023-12-11",
+          "summary": "Preoperative consultation",
+          "notes": "Cleared for arthroscopic surgery. Reviewed medication plan."
+        }
+      ],
+      "pharmacist": "Dr. Naomi Ellis",
+      "prescriptions": [
+        {
+          "quantity": 7.5,
+          "name": "Meloxicam"
+        },
+        {
+          "quantity": 500,
+          "name": "Acetaminophen"
+        }
+      ]
+    }
+  },
+  "insuranceOptions": [
+    "Standard Health",
+    "Family Shield",
+    "Premium Plus",
+    "Community Care"
+  ]
+}
