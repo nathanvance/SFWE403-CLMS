@@ -127,6 +127,7 @@ public class SecondaryController {
 
     @FXML
     void returnToLogin(ActionEvent event) throws IOException  {
+        SessionManager.INSTANCE.clear();
         App.setRoot("sample1");
     }
 

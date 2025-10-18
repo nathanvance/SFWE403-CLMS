@@ -48,18 +48,24 @@ public class LogInController {
         String passwordInput = passwordText.getText();
         System.out.println("user input recognized" + usernameInput);
 
-        String result = LoginManager.INSTANCE.verifyLogin(usernameInput, passwordInput);
+        LoginManager.LoginResult result = LoginManager.INSTANCE.verifyLogin(usernameInput, passwordInput);
 
-        switch (result) {
-            case "true":
-                App.setRoot("secondary");
+        switch (result.getStatus()) {
+            case SUCCESS:
+                String role = result.getRole() != null ? result.getRole() : "Patient";
+                SessionManager.INSTANCE.startSession(usernameInput, role);
+                if ("patient".equalsIgnoreCase(role)) {
+                    App.setRoot("patientDashboard");
+                } else {
+                    App.setRoot("secondary");
+                }
                 break;
-            case "false":
+            case INVALID:
                 System.out.println("wrong username");
                 loginWarnings.setText("Username or password incorrect.");
                 loginWarnings.setVisible(true);
                 break;
-            case "locked":
+            case LOCKED:
                 loginWarnings.setText("Account locked. Please contact an administrator.");
                 loginWarnings.setVisible(true);
                 break;
@@ -123,5 +129,4 @@ public class LogInController {
         });
     }
 }
-
 

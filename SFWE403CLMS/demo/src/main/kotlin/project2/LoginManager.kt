@@ -1,32 +1,49 @@
 package project2
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.File
 
 object LoginManager {
-    val loginHolder = File("demo/src/data/user_pass.csv")
-    private var logins = parseFile();
-    private var locked = parseLocked();
+    val loginHolder = File("SFWE403CLMS/demo/src/data/user_pass.csv")
+    private var logins = parseFile()
+    private var locked = parseLocked()
+
+    data class LoginEntry(val hash: String, val role: String)
+
+    enum class LoginStatus {
+        SUCCESS,
+        INVALID,
+        LOCKED
+    }
+
+    data class LoginResult(val status: LoginStatus, val role: String? = null)
 
     fun register(username: String, password: String): Boolean {
         if (logins.containsKey(username)) {
             println("Username '$username' already exists!") //Replace with error messages in registration window later
-            return false;
+            return false
         }
 
-        val hash = PasswordHash.hashPWD(password.toCharArray());
-        FileUtils.appendToFile(loginHolder, mutableListOf("$username,$hash,Patient"));
-        logins = parseFile();
+        val hash = PasswordHash.hashPWD(password.toCharArray())
+        FileUtils.appendToFile(loginHolder, mutableListOf("$username,$hash,Patient"))
+        logins = parseFile()
 
-        println("Successfully registered user `$username`");
-        return true;
+        println("Successfully registered user `$username`")
+        return true
     }
 
-    fun verifyLogin(username: String, password: String): String {
-        if (locked[username] == true) return "locked"
-        val stored = logins[username] ?: return "false";
+    fun verifyLogin(username: String, password: String): LoginResult {
+        if (locked[username] == true) {
+            return LoginResult(LoginStatus.LOCKED)
+        }
 
-        return if (PasswordHash.verifyPWD(password.toCharArray(), stored)) "true" else "false";
+        val entry = logins[username] ?: return LoginResult(LoginStatus.INVALID)
+        val verified = PasswordHash.verifyPWD(password.toCharArray(), entry.hash)
+
+        return if (verified) {
+            LoginResult(LoginStatus.SUCCESS, entry.role)
+        } else {
+            LoginResult(LoginStatus.INVALID)
+        }
     }
 
     fun passwordChecks(username: String, password: String, confirmation: String): List<String> {
@@ -40,38 +57,42 @@ object LoginManager {
         }
     }
 
-    private fun parseFile(): MutableMap<String, String> {
-        val lines = loginHolder.readLines();
-        val map = mutableMapOf<String, String>();
+    private fun parseFile(): MutableMap<String, LoginEntry> {
+        val lines = loginHolder.readLines()
+        val map = mutableMapOf<String, LoginEntry>()
 
         for (line in lines) {
-            if (line.contains("username,hash")) continue;
+            if (line.contains("username,hash")) continue
 
-            val pair = line.split(",");
-            if (pair.size < 2) continue;
+            val parts = line.split(",")
+            if (parts.size < 2) continue
 
-            map[pair[0]] = pair[1];
+            val username = parts[0]
+            val hash = parts[1]
+            val role = parts.getOrNull(2) ?: "Patient"
+
+            map[username] = LoginEntry(hash, role)
         }
 
-        return map;
+        return map
     }
 
     private fun parseLocked(): MutableMap<String, Boolean> {
-        val lines = loginHolder.readLines();
-        val map = mutableMapOf<String, Boolean>();
+        val lines = loginHolder.readLines()
+        val map = mutableMapOf<String, Boolean>()
 
         for (line in lines) {
-            if (line.contains("username,hash")) continue;
+            if (line.contains("username,hash")) continue
 
-            val parts = line.split(",");
+            val parts = line.split(",")
             if ("LOCKED ACCOUNT" !in parts) {
                 map[parts[0]] = false
-                continue;
-            };
-            map[parts[0]] = true;
+                continue
+            }
+            map[parts[0]] = true
         }
 
-        return map;
+        return map
     }
 
 }
