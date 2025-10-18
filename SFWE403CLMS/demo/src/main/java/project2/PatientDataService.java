@@ -74,6 +74,60 @@ public final class PatientDataService {
         return new ArrayList<>(loadData().getInsuranceOptions());
     }
 
+    public static List<PatientProfile> getPatientsForPharmacist(String pharmacistId) {
+        if (pharmacistId == null || pharmacistId.isBlank()) {
+            return List.of();
+        }
+
+        String target = pharmacistId.trim();
+        PatientData data = loadData();
+        List<PatientProfile> matches = new ArrayList<>();
+
+        for (PatientProfile profile : data.getPatients().values()) {
+            if (profile == null) {
+                continue;
+            }
+            if (matchesPharmacist(profile, target)) {
+                matches.add(profile);
+            }
+        }
+
+        return matches;
+    }
+
+    public static List<PharmacistAssignment> getAssignmentsForPharmacist(String pharmacistId) {
+        List<PatientProfile> patients = getPatientsForPharmacist(pharmacistId);
+        List<PharmacistAssignment> assignments = new ArrayList<>();
+
+        for (PatientProfile profile : patients) {
+            List<PrescriptionDetails> prescriptions = profile.getPrescriptions();
+            if (prescriptions == null || prescriptions.isEmpty()) {
+                assignments.add(new PharmacistAssignment(profile.getUsername(), "None assigned", 0.0));
+                continue;
+            }
+
+            for (PrescriptionDetails prescription : prescriptions) {
+                if (prescription == null) {
+                    continue;
+                }
+                assignments.add(new PharmacistAssignment(
+                        profile.getUsername(),
+                        prescription.getName(),
+                        prescription.getQuantity()
+                ));
+            }
+        }
+
+        return assignments;
+    }
+
+    public static Optional<String> getPharmacistDisplayName(String pharmacistId) {
+        return getPatientsForPharmacist(pharmacistId).stream()
+                .map(PatientProfile::getPharmacist)
+                .filter(name -> name != null && !name.isBlank())
+                .findFirst();
+    }
+
     public static synchronized boolean updateInsurance(String username, String newInsurance) throws IOException {
         PatientData data = loadData();
         Optional<PatientProfile> maybePatient = findPatient(username);
@@ -123,6 +177,7 @@ public final class PatientDataService {
                     PatientProfile profile = new PatientProfile();
                     profile.setUsername(key);
                     profile.setPharmacist(patientObj.optString("pharmacist", null));
+                    profile.setPharmacistId(patientObj.optString("pharmacistId", null));
                     profile.setInsurance(patientObj.optString("insurance", null));
 
                     JSONArray healthArray = patientObj.optJSONArray("healthRecords");
@@ -195,6 +250,9 @@ public final class PatientDataService {
             }
 
             JSONObject patientObj = new JSONObject();
+            if (profile.getPharmacistId() != null) {
+                patientObj.put("pharmacistId", profile.getPharmacistId());
+            }
             if (profile.getPharmacist() != null) {
                 patientObj.put("pharmacist", profile.getPharmacist());
             }
@@ -264,6 +322,33 @@ public final class PatientDataService {
         }
 
         return DEFAULT_DATA_PATH;
+    }
+
+    private static boolean matchesPharmacist(PatientProfile profile, String target) {
+        if (profile == null || target == null) {
+            return false;
+        }
+
+        String id = profile.getPharmacistId();
+        if (id != null && !id.isBlank() && id.equalsIgnoreCase(target)) {
+            return true;
+        }
+
+        String sanitizedTarget = sanitize(target);
+        if (sanitizedTarget.isEmpty()) {
+            return false;
+        }
+
+        if (id != null && !id.isBlank() && sanitize(id).equals(sanitizedTarget)) {
+            return true;
+        }
+
+        String display = profile.getPharmacist();
+        return display != null && !display.isBlank() && sanitize(display).equals(sanitizedTarget);
+    }
+
+    private static String sanitize(String value) {
+        return value == null ? "" : value.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
     }
 
     private static void hydrateUsernames(PatientData data) {
