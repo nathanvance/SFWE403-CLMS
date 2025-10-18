@@ -38,7 +38,7 @@ public class viewPrescriptionsController {
 
     @FXML
     void goBackToSecondary(ActionEvent event) throws IOException  {
-        App.setRoot("secondary");
+        App.setRoot("login");
     }
 
      private ObservableList<Prescription> prescriptions = FXCollections.observableArrayList();
@@ -52,7 +52,7 @@ public class viewPrescriptionsController {
         drugQuantity.setCellValueFactory(new PropertyValueFactory<Prescription, String>("drugQuantity"));
 
         
-        String findThisUsername = SecondaryController.getUserPrescripsSearch();
+        String findThisUsername = PrescriptionsController.getUserPrescripsSearch();
         prescriptions = BackEnd.loadUserPrescriptions(findThisUsername);
         viewPrescriptions.setItems(prescriptions);
 

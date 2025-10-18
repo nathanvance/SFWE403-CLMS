@@ -13,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
 
-
 public class viewReportController {
 
     @FXML
@@ -38,45 +37,35 @@ public class viewReportController {
     private Button viewReportGoBackButton;
 
     @FXML
-    void switchBackToSecondary(ActionEvent event) throws IOException  {
-        App.setRoot("secondary");
+    void switchBackToSecondary(ActionEvent event) throws IOException {
+        App.setRoot("login");
     }
 
     private ObservableList<User> users = FXCollections.observableArrayList();
 
-    
-     public void initialize() {
 
-
+    public void initialize() {
 
 
         prescriptionPassword.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
         prescriptionUsername.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
         prescriptionName.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
         prescriptionAge.setCellValueFactory(new PropertyValueFactory<User, String>("age"));
-       
 
-                //"C:\Users\henry\Downloads\Project2Java\demo\src\main\java\project2\output.csv"
-        String filePath = "demo/output.csv";
-       
-       //call a loadData function here to load the list users
+
+        //call a loadData function here to load the list users
         users = FXCollections.observableArrayList();
 
-        users = BackEnd.loadUserData(filePath);
-                prescriptionView.setItems(users);
-                
-            }
-        
-        
-            
-    
+        users = BackEnd.loadUserData();
+        prescriptionView.setItems(users);
+
+    }
+
+
     // prescriptionUsername.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
     // prescriptionPassword.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
-  
+
     //prescriptionView.setItems(users);
-
-    
-
 
 
 }

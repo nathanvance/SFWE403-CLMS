@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.9" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="project2.PatientDashboardController"
+            prefWidth="900" prefHeight="600">
+
+    <VBox spacing="15" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Header -->
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label fx:id="patientNameLabel" text="Patient Name"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+            <Label text="| Pharmacist:" style="-fx-text-fill: gray;" />
+            <Label fx:id="pharmacistLabel" text="Dr. [Pharmacist]"
+                   style="-fx-font-size: 14px;" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="logoutButton" text="Logout" onAction="#logout"
+                    style="-fx-background-color: #d33; -fx-text-fill: white;"/>
+        </HBox>
+
+        <Separator/>
+
+        <!-- Prescriptions Table -->
+        <Label text="Active Prescriptions"
+               style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <TableView fx:id="prescriptionsTable" prefHeight="200">
+            <columns>
+                <TableColumn fx:id="prescriptionNameColumn"
+                             text="Prescription Name" prefWidth="250"/>
+                <TableColumn fx:id="prescriptionQuantityColumn"
+                             text="Quantity" prefWidth="150"/>
+            </columns>
+        </TableView>
+
+        <Separator/>
+
+        <!-- Health History Table -->
+        <Label text="Health History"
+               style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <TableView fx:id="healthRecordsTable" prefHeight="220">
+            <columns>
+                <TableColumn fx:id="recordDateColumn"
+                             text="Date" prefWidth="120"/>
+                <TableColumn fx:id="recordSummaryColumn"
+                             text="Summary" prefWidth="300"/>
+                <TableColumn fx:id="recordNotesColumn"
+                             text="Notes" prefWidth="400"/>
+            </columns>
+        </TableView>
+
+        <Separator/>
+
+        <!-- Insurance Section -->
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <Label text="Insurance:" style="-fx-font-size: 14px;"/>
+            <ComboBox fx:id="insuranceComboBox" prefWidth="200"/>
+            <Button fx:id="saveInsuranceButton" text="Save" onAction="#saveInsurance"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+            <Label fx:id="insuranceStatusLabel" textFill="#d03535" visible="false"/>
+        </HBox>
+    </VBox>
+
+</AnchorPane>

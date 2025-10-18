@@ -1,7 +1,9 @@
 package project2;
 
 import java.io.IOException;
+import java.util.Collection;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,22 +22,16 @@ public class AdminDashboardController {
     private AnchorPane adminDashboardPane;
 
     @FXML
-    private TableView<User> userTable;
+    private TableView<UserKT> userTable;
 
     @FXML
-    private TableColumn<User, String> usernameColumn;
+    private TableColumn<UserKT, String> usernameColumn;
 
     @FXML
-    private TableColumn<User, String> nameColumn;
+    private TableColumn<UserKT, String> typeColumn;
 
     @FXML
-    private TableColumn<User, String> ageColumn;
-
-    @FXML
-    private TableColumn<User, String> roleColumn;
-
-    @FXML
-    private TableColumn<User, Void> actionColumn;
+    private TableColumn<UserKT, Void> actionColumn;
 
     @FXML
     private Button refreshButton;
@@ -43,45 +39,45 @@ public class AdminDashboardController {
     @FXML
     private Button logoutButton;
 
-    private ObservableList<User> users;
+    private ObservableList<UserKT> users;
 
     public void initialize() {
-        // Set up table columns
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
-        // Set up the action column with ComboBox for role selection
+        typeColumn.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(
+                        cellData.getValue().getClass().getSimpleName()
+                )
+        );
+
         setupActionColumn();
-
-        // Load users
         refreshUserList();
     }
 
-    private void setupActionColumn() {
-        Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<TableColumn<User, Void>, TableCell<User, Void>>() {
-            @Override
-            public TableCell<User, Void> call(final TableColumn<User, Void> param) {
-                final TableCell<User, Void> cell = new TableCell<User, Void>() {
 
-                    private final ComboBox<String> roleComboBox = new ComboBox<>();
+    private void setupActionColumn() {
+        Callback<TableColumn<UserKT, Void>, TableCell<UserKT, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<UserKT, Void> call(final TableColumn<UserKT, Void> param) {
+                final TableCell<UserKT, Void> cell = new TableCell<>() {
+
+                    private final ComboBox<String> typeComboBox = new ComboBox<>();
 
                     {
-                        roleComboBox.getItems().addAll("admin", "user", "pharmacist");
-                        roleComboBox.setOnAction((ActionEvent event) -> {
-                            User user = getTableView().getItems().get(getIndex());
-                            String newRole = roleComboBox.getValue();
-                            if (newRole != null && !newRole.equals(user.getRole())) {
-                                // Update the role
-                                boolean success = BackEnd.updateUserRole(user.getUsername(), newRole);
+                        typeComboBox.getItems().addAll("Patient", "Pharmacist", "Admin");
+                        typeComboBox.setOnAction((ActionEvent event) -> {
+                            UserKT user = getTableView().getItems().get(getIndex());
+                            String currentType = user.getClass().getSimpleName();
+                            String newType = typeComboBox.getValue();
+
+                            if (newType != null && !newType.equals(currentType)) {
+                                boolean success = LoginManager.updateUserType(user.getUsername(), newType);
                                 if (success) {
-                                    user.setRole(newRole);
-                                    getTableView().refresh();
-                                    System.out.println("Updated role for user: " + user.getUsername() + " to " + newRole);
+                                    System.out.println("✅ Updated type for " + user.getUsername() + " to " + newType);
+                                    refreshUserList(); // reload with new subclass type
                                 } else {
-                                    System.err.println("Failed to update role for user: " + user.getUsername());
-                                    roleComboBox.setValue(user.getRole()); // Reset to original value
+                                    System.err.println("❌ Failed to update type for " + user.getUsername());
+                                    typeComboBox.setValue(currentType);
                                 }
                             }
                         });
@@ -93,28 +89,28 @@ public class AdminDashboardController {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            User user = getTableView().getItems().get(getIndex());
-                            roleComboBox.setValue(user.getRole());
-                            setGraphic(roleComboBox);
+                            UserKT user = getTableView().getItems().get(getIndex());
+                            typeComboBox.setValue(user.getClass().getSimpleName());
+                            setGraphic(typeComboBox);
                         }
                     }
                 };
                 return cell;
             }
         };
-
         actionColumn.setCellFactory(cellFactory);
     }
 
     @FXML
     void refreshUserList() {
-        String filePath = "demo/output.csv";
-        users = BackEnd.loadUserData(filePath);
+        // load from UserManager instead of BackEnd
+        Collection<UserKT> allUsers = UserManager.INSTANCE.getAllUsers();
+        users = FXCollections.observableArrayList(allUsers);
         userTable.setItems(users);
     }
 
     @FXML
     void logout(ActionEvent event) throws IOException {
-        App.setRoot("sample1");
+        App.setRoot("login");
     }
 }

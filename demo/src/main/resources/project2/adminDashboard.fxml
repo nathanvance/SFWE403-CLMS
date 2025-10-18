@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="adminDashboardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.AdminDashboardController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="50.0" layoutY="30.0" prefHeight="540.0" prefWidth="700.0" spacing="20.0">
+      <VBox alignment="CENTER" layoutX="50.0" layoutY="30.0" prefHeight="540.0" prefWidth="700.0" spacing="20.0">
          <children>
             <Label text="Admin Dashboard - User Role Management" textFill="#2699a1">
                <font>
@@ -28,11 +28,9 @@
             
             <TableView fx:id="userTable" prefHeight="400.0" prefWidth="700.0">
               <columns>
-                <TableColumn fx:id="usernameColumn" prefWidth="150.0" text="Username" />
-                <TableColumn fx:id="nameColumn" prefWidth="150.0" text="Name" />
-                <TableColumn fx:id="ageColumn" prefWidth="100.0" text="Age" />
-                <TableColumn fx:id="roleColumn" prefWidth="150.0" text="Current Role" />
-                <TableColumn fx:id="actionColumn" prefWidth="150.0" text="Change Role" />
+                  <TableColumn fx:id="usernameColumn" text="Username" />
+                  <TableColumn fx:id="typeColumn" text="Type" />
+                  <TableColumn fx:id="actionColumn" text="Actions" />
               </columns>
             </TableView>
             
