@@ -29,16 +29,6 @@
     </dependencies>
     <build>
         <plugins>
-            <!-- Java Compiler Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <release>11</release>
-                </configuration>
-            </plugin>
-
             <!-- Kotlin Compiler Plugin -->
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -62,6 +52,16 @@
                 </executions>
                 <configuration>
                     <jvmTarget>11</jvmTarget>
+                </configuration>
+            </plugin>
+
+            <!-- Java Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <release>11</release>
                 </configuration>
             </plugin>
 

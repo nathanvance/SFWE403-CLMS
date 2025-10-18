@@ -2,41 +2,60 @@ package project2
 
 import java.io.File
 import java.io.FileWriter
+import java.io.RandomAccessFile
 
 object FileUtils {
 
+    private fun ensureReady(file: File) {
+        file.parentFile?.mkdirs()
+        if (!file.exists()) file.createNewFile()
+    }
+
+    private fun needsLeadingNewline(file: File): Boolean {
+        if (!file.exists()) return false
+        val len = file.length()
+        if (len == 0L) return false
+        RandomAccessFile(file, "r").use { raf ->
+            raf.seek(len - 1)
+            val last = raf.read()
+            // treat both \n and \r as newline endings
+            return last != '\n'.code && last != '\r'.code
+        }
+    }
+
     fun appendToFile(file: File, data: List<String>) {
-        FileWriter(file, true).use { writer ->
-            data.forEach { writer.appendLine(it); }
+        ensureReady(file)
+        FileWriter(file, true).use { w ->
+            if (needsLeadingNewline(file)) w.append(System.lineSeparator())
+            data.forEach { w.append(it).append(System.lineSeparator()) }
         }
     }
 
     fun replaceInFile(file: File, toReplace: String, replaceString: String): Boolean {
-        val content = file.readText();
-        val newContent = content.replace(toReplace, replaceString);
-
-        if (newContent != content) {
-            file.writeText(content)
-            return true;
-        }
-
-        return false;
+        if (!file.exists()) return false
+        val content = file.readText()
+        val newContent = content.replace(toReplace, replaceString)
+        if (newContent == content) return false
+        file.writeText(newContent)   // FIX: write the updated content
+        return true
     }
 
     fun findLine(file: File, query: String): String? {
-        val lines = file.readLines();
-        return lines.find { it.contains(query) };
+        if (!file.exists()) return null
+        return file.readLines().find { it.contains(query) }
     }
 
     fun appendLine(file: File, lineQuery: String, data: List<String>): Boolean {
-        val lines = file.readLines().toMutableList();
-        val index = lines.indexOfFirst { it.contains(lineQuery) };
-        if (index == -1) return false;
+        if (!file.exists()) return false
+        val lines = file.readLines().toMutableList()
+        val index = lines.indexOfFirst { it.contains(lineQuery) }
+        if (index == -1) return false
 
-        val appendText = data.joinToString(", ");
-        lines[index] = lines[index] + " " + appendText;
+        // CSV-safe: join with commas, no extra spaces
+        val appendText = data.joinToString(",")
+        lines[index] = lines[index] + "," + appendText
 
-        file.writeText(lines.joinToString("\n"));
-        return true;
+        file.writeText(lines.joinToString(System.lineSeparator()))
+        return true
     }
 }

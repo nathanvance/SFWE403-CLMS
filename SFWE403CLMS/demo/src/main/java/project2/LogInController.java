@@ -55,8 +55,12 @@ public class LogInController {
                 App.setRoot("secondary");
                 break;
             case "false":
-                System.out.println("wrong username");
-                loginWarnings.setText("Username or password incorrect.");
+                int rem = LoginManager.INSTANCE.remainingAttempts(usernameInput);
+                String plural = (rem == 1 ? "" : "s");
+                loginWarnings.setText(
+                        "Username or password incorrect. " +
+                                rem + " attempt" + plural + " remaining."
+                );
                 loginWarnings.setVisible(true);
                 break;
             case "locked":
