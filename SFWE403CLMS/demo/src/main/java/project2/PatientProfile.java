@@ -3,6 +3,7 @@ package project2;
 public class PatientProfile {
     private String username;
     private String pharmacist;
+    private String pharmacistId;
     private String insurance;
     private java.util.List<HealthRecord> healthRecords = new java.util.ArrayList<>();
     private java.util.List<PrescriptionDetails> prescriptions = new java.util.ArrayList<>();
@@ -25,6 +26,14 @@ public class PatientProfile {
 
     public void setPharmacist(String pharmacist) {
         this.pharmacist = pharmacist;
+    }
+
+    public String getPharmacistId() {
+        return pharmacistId;
+    }
+
+    public void setPharmacistId(String pharmacistId) {
+        this.pharmacistId = pharmacistId;
     }
 
     public String getInsurance() {

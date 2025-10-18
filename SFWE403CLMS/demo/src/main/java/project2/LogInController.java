@@ -56,6 +56,8 @@ public class LogInController {
                 SessionManager.INSTANCE.startSession(usernameInput, role);
                 if ("patient".equalsIgnoreCase(role)) {
                     App.setRoot("patientDashboard");
+                } else if ("pharmacist".equalsIgnoreCase(role)) {
+                    App.setRoot("pharmacistDashboard");
                 } else {
                     App.setRoot("secondary");
                 }
@@ -129,4 +131,3 @@ public class LogInController {
         });
     }
 }
-

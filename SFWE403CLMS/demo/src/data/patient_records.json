@@ -7,7 +7,8 @@
         "summary": "Follow-up visit",
         "notes": "Physical therapy improving mobility. Continue sessions."
       }],
-      "pharmacist": "Dr. Samuel Chen",
+      "pharmacistId": "jackson.reed",
+      "pharmacist": "Jackson Reed, PharmD",
       "prescriptions": [{
         "quantity": 400,
         "name": "Ibuprofen"
@@ -20,7 +21,8 @@
         "summary": "Prenatal visit",
         "notes": "Second trimester check-in. Ultrasound normal."
       }],
-      "pharmacist": "Dr. Sara Patel",
+      "pharmacistId": "jackson.reed",
+      "pharmacist": "Jackson Reed, PharmD",
       "prescriptions": [{
         "quantity": 1,
         "name": "Prenatal Multivitamin"
@@ -40,7 +42,8 @@
           "notes": "Reviewed allergy symptoms. Adjusted medication."
         }
       ],
-      "pharmacist": "Dr. Priya Wallace",
+      "pharmacistId": "jackson.reed",
+      "pharmacist": "Jackson Reed, PharmD",
       "prescriptions": [
         {
           "quantity": 0.005,
@@ -66,6 +69,7 @@
           "notes": "Cleared for arthroscopic surgery. Reviewed medication plan."
         }
       ],
+      "pharmacistId": "naomi.ellis",
       "pharmacist": "Dr. Naomi Ellis",
       "prescriptions": [
         {
