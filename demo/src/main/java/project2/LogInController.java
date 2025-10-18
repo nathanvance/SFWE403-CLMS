@@ -37,8 +37,17 @@ public class LogInController {
         String passwordInput = passwordText.getText();
         System.out.print("user input recognized" + usernameInput);
 
-        if (BackEnd.checkLogin(usernameInput, passwordInput)) {
-        App.setRoot("secondary");
+        String userRole = BackEnd.checkLoginAndGetRole(usernameInput, passwordInput);
+        
+        if (userRole != null) {
+            // Login successful
+            if ("admin".equals(userRole)) {
+                // Redirect to admin dashboard
+                App.setRoot("adminDashboard");
+            } else {
+                // Redirect to regular user interface
+                App.setRoot("secondary");
+            }
         }
         else {
             System.out.print("wrong username");

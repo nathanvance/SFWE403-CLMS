@@ -5,6 +5,7 @@ public class User {
     private String password;
     private String name;
     private String age;
+    private String role;
 
     //TO DO: add a user access field for user permissions. 
     //Before adding a prescription we need to make sure the account is created first and in the list
@@ -13,11 +14,17 @@ public class User {
     //make sure we check that quantity entered does not exceed quantity availble
 
     // Constructor
-    public User(String username, String password, String name, String age) {
+    public User(String username, String password, String name, String age, String role) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.age = age;
+        this.role = role;
+    }
+    
+    // Constructor for backward compatibility (defaults to "user" role)
+    public User(String username, String password, String name, String age) {
+        this(username, password, name, age, "user");
     }
 
     // Getters
@@ -37,7 +44,13 @@ public class User {
         return age;
     }
 
-    
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
 }
 

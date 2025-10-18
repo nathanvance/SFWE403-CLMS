@@ -57,7 +57,7 @@ public class viewReportController {
        
 
                 //"C:\Users\henry\Downloads\Project2Java\demo\src\main\java\project2\output.csv"
-        String filePath = "C:\\Users\\henry\\Downloads\\Project2Java\\demo\\src\\main\\java\\project2\\output.csv";
+        String filePath = "demo/output.csv";
        
        //call a loadData function here to load the list users
         users = FXCollections.observableArrayList();

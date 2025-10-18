@@ -1,1 +1,54 @@
-Dr. Lee,Antihistamine,Loratadine,21
+username,pharmacistName,prescriptionName,drugName,drugQuantity
+Charlie,Dr. Patel,Antihistamine,Diphenhydramine,50
+Charlie,Dr. Smith,Antidepressant,Sertraline,40
+Charlie,Dr. Lee,Antidepressant,Sertraline,25
+Alice,Dr. Lee,Painkiller,Ibuprofen,20
+Diana,Dr. Taylor,Antibiotic,Ciprofloxacin,50
+Evan,Dr. Lee,Antidepressant,Citalopram,50
+Evan,Dr. Lee,Antihistamine,Loratadine,30
+Bob,Dr. Lee,Antibiotic,Doxycycline,35
+Alice,Dr. Taylor,Antibiotic,Doxycycline,10
+Bob,Dr. Lee,Painkiller,Ibuprofen,10
+Bob,Dr. Nguyen,Antidepressant,Fluoxetine,45
+Charlie,Dr. Smith,Antibiotic,Doxycycline,40
+Bob,Dr. Smith,Mood Stabilizer,Lithium,15
+Evan,Dr. Patel,Antihistamine,Cetirizine,10
+Bob,Dr. Nguyen,Painkiller,Acetaminophen,10
+Alice,Dr. Nguyen,Antihistamine,Cetirizine,25
+Evan,Dr. Nguyen,Antibiotic,Doxycycline,35
+Charlie,Dr. Nguyen,Antihistamine,Loratadine,45
+Alice,Dr. Lee,Antidepressant,Fluoxetine,50
+Charlie,Dr. Lee,Painkiller,Aspirin,25
+Evan,Dr. Taylor,Antihistamine,Diphenhydramine,10
+Alice,Dr. Patel,Antihistamine,Loratadine,30
+Charlie,Dr. Patel,Antidepressant,Sertraline,10
+Charlie,Dr. Lee,Painkiller,Acetaminophen,30
+Diana,Dr. Nguyen,Antidepressant,Fluoxetine,45
+Diana,Dr. Lee,Mood Stabilizer,Valproate,5
+Evan,Dr. Lee,Antidepressant,Fluoxetine,40
+Alice,Dr. Smith,Painkiller,Aspirin,50
+Bob,Dr. Taylor,Painkiller,Acetaminophen,35
+Evan,Dr. Patel,Painkiller,Aspirin,35
+Evan,Dr. Smith,Antihistamine,Loratadine,20
+Alice,Dr. Nguyen,Antibiotic,Amoxicillin,25
+Evan,Dr. Patel,Antibiotic,Ciprofloxacin,10
+Bob,Dr. Patel,Antidepressant,Citalopram,5
+Evan,Dr. Smith,Antibiotic,Ciprofloxacin,25
+Charlie,Dr. Patel,Antibiotic,Amoxicillin,10
+Diana,Dr. Lee,Antihistamine,Cetirizine,45
+Diana,Dr. Nguyen,Antihistamine,Loratadine,35
+Bob,Dr. Taylor,Antidepressant,Sertraline,40
+Diana,Dr. Smith,Antibiotic,Doxycycline,15
+Charlie,Dr. Smith,Mood Stabilizer,Lamotrigine,30
+Evan,Dr. Nguyen,Mood Stabilizer,Lithium,30
+Bob,Dr. Smith,Painkiller,Ibuprofen,45
+Diana,Dr. Nguyen,Mood Stabilizer,Valproate,5
+Charlie,Dr. Nguyen,Antibiotic,Ciprofloxacin,20
+Bob,Dr. Lee,Antibiotic,Ciprofloxacin,15
+Evan,Dr. Patel,Antidepressant,Citalopram,50
+Charlie,Dr. Nguyen,Painkiller,Aspirin,10
+Alice,Dr. Smith,Antihistamine,Diphenhydramine,15
+Diana,Dr. Nguyen,Antidepressant,Citalopram,40Dr. Lee,Antihistamine,Loratadine,21
+Anthony,Dr. Lee,Antihistamine,Loratadine,34
+Anthony,Dr. Lee,someDrug,someName,32
+John,someDoctor,somePrescription,someDrug,32
