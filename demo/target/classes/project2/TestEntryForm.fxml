@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.TestEntryFormController">
+    <content>
+        <VBox prefHeight="1024.0" prefWidth="402.0" spacing="8">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Enter Test Entry Data" />
+
+            <!-- Report Information -->
+            <Label text="Report Information" />
+            <TextField fx:id="reportIDField" promptText="Report ID" />
+            <TextField fx:id="reportDateTimeField" promptText="Report Date &amp; Time (YYYY-MM-DD HH:MM:SS)" />
+
+            <!-- Patient Information -->
+            <Label text="Patient Information" />
+            <TextField fx:id="patientIDField" promptText="Patient ID" />
+            <TextField fx:id="patientNameField" promptText="Patient Name" />
+            <TextField fx:id="dateOfBirthField" promptText="Date of Birth (YYYY-MM-DD)" />
+            <TextField fx:id="ageField" promptText="Age" />
+            <TextField fx:id="genderField" promptText="Gender" />
+
+            <!-- Physician Information -->
+            <Label text="Physician Information" />
+            <TextField fx:id="physicianIDField" promptText="Physician ID" />
+            <TextField fx:id="physicianNameField" promptText="Physician Name" />
+
+            <!-- Test Execution Details -->
+            <Label text="Test Execution Details" />
+            <TextField fx:id="sampleTypeField" promptText="Sample Type" />
+            <TextField fx:id="sampleIDField" promptText="Sample ID" />
+            <TextField fx:id="collectionDateTimeField" promptText="Collection Date &amp; Time (YYYY-MM-DD HH:MM:SS)" />
+            <TextField fx:id="collectedByField" promptText="Collected By" />
+            <TextField fx:id="testPerformedByField" promptText="Test Performed By" />
+            <TextField fx:id="machineUsedField" promptText="Machine Used" />
+
+            <!-- Test Results -->
+            <Label text="Test Results" />
+            <TextField fx:id="testNameField" promptText="Test Name" />
+            <TextField fx:id="resultValuesField" promptText="Result Values" />
+            <TextField fx:id="unitsField" promptText="Units" />
+            <TextField fx:id="normalRangeField" promptText="Normal Reference Range" />
+            <TextField fx:id="resultStatusField" promptText="Result Status" />
+            <TextField fx:id="resultsReceivedDateTimeField" promptText="Results Received Date &amp; Time (YYYY-MM-DD HH:MM:SS)" />
+
+            <!-- Insurance / Billing -->
+            <Label text="Insurance / Billing" />
+            <TextField fx:id="insuranceProviderField" promptText="Insurance Provider" />
+            <TextField fx:id="insurancePolicyNumberField" promptText="Insurance Policy Number" />
+
+            <Button maxWidth="Infinity" onAction="#handleEnterButton" text="Enter" />
+         <Button mnemonicParsing="false" onAction="#handleGoBackButton" prefHeight="25.0" prefWidth="394.0" text="Go Back" />
+
+            <Label fx:id="statusLabel" textFill="green" />
+        </VBox>
+    </content>
+</ScrollPane>

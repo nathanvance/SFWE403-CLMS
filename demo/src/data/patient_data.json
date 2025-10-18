@@ -1,0 +1,328 @@
+{
+  "patients": [
+    {
+      "username": "nathanvance",
+      "hash": "100000:xRONc0QQeiD7YyspNlKYBQ\u003d\u003d:yEoZXLftYb3FrRMme6Drmg\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Metformin",
+          "quantity": 1.2,
+          "lastPickupDate": "2025-09-12"
+        },
+        {
+          "name": "Lisinopril",
+          "quantity": 0.8,
+          "lastPickupDate": "2025-10-01"
+        },
+        {
+          "name": "Atorvastatin",
+          "quantity": 1.0,
+          "lastPickupDate": "2025-07-30"
+        },
+        {
+          "name": "Amlodipine",
+          "quantity": 0.6,
+          "lastPickupDate": "2025-09-10"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-08-22",
+          "summary": "Routine checkup",
+          "notes": "Patient’s blood sugar stable; continue Metformin."
+        },
+        {
+          "date": "2025-10-01",
+          "summary": "Follow-up",
+          "notes": "Blood pressure improved with Lisinopril."
+        }
+      ],
+      "pharmacist": "Dr. Hugo Tanaka"
+    },
+    {
+      "username": "andrew.taylor",
+      "hash": "100000:CaaXh5g1cCebBy6Z6QczLg\u003d\u003d:xAl4IX8Bc0o3yBxG3QooDg\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Amoxicillin",
+          "quantity": 0.5,
+          "lastPickupDate": "2025-09-28"
+        },
+        {
+          "name": "Ibuprofen",
+          "quantity": 0.25,
+          "lastPickupDate": "2025-10-05"
+        },
+        {
+          "name": "Cetirizine",
+          "quantity": 0.1,
+          "lastPickupDate": "2025-08-20"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-09-29",
+          "summary": "Cold \u0026 congestion",
+          "notes": "Advised hydration and rest. Prescribed Amoxicillin and Cetirizine."
+        }
+      ],
+      "pharmacist": "Dr. Lana Moretti",
+      "insurance": "Premium Plus",
+      "pharmacistId": ""
+    },
+    {
+      "username": "mia_fernandez",
+      "hash": "100000:K26BsYh4QeZbyaNkpkxclg\u003d\u003d:xMJ6xhjsAmU+J2w7xnyiDg\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Paracetamol",
+          "quantity": 0.3,
+          "lastPickupDate": "2025-10-09"
+        },
+        {
+          "name": "Omeprazole",
+          "quantity": 0.5,
+          "lastPickupDate": "2025-09-18"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-09-18",
+          "summary": "Stomach discomfort",
+          "notes": "Omeprazole prescribed; condition improving."
+        },
+        {
+          "date": "2025-10-09",
+          "summary": "Headache",
+          "notes": "Short-term Paracetamol use; advised to rest."
+        }
+      ],
+      "pharmacist": "Dr. Lana Moretti",
+      "insurance": "Family Shield",
+      "pharmacistId": ""
+    },
+    {
+      "username": "jackson.reed",
+      "hash": "100000:rlPoB04uIb1aXyLn+xay6Q\u003d\u003d:9PSit+J4J58eujN2SBPEsA\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Insulin Glargine",
+          "quantity": 2.5,
+          "lastPickupDate": "2025-10-11"
+        },
+        {
+          "name": "Furosemide",
+          "quantity": 0.4,
+          "lastPickupDate": "2025-08-25"
+        },
+        {
+          "name": "Levothyroxine",
+          "quantity": 0.15,
+          "lastPickupDate": "2025-09-05"
+        },
+        {
+          "name": "Prednisone",
+          "quantity": 0.75,
+          "lastPickupDate": "2025-09-29"
+        },
+        {
+          "name": "Metoprolol",
+          "quantity": 0.9,
+          "lastPickupDate": "2025-10-03"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-08-25",
+          "summary": "Fluid retention",
+          "notes": "Started Furosemide. Scheduled monitoring."
+        },
+        {
+          "date": "2025-10-11",
+          "summary": "Diabetes follow-up",
+          "notes": "Adjusted insulin dosage; blood sugar stabilized."
+        }
+      ],
+      "pharmacist": "Dr. Tobias Vang"
+    },
+    {
+      "username": "olivia_wright",
+      "hash": "100000:L1wpJx8Y7o+OHZn7CS5pyw\u003d\u003d:PlIDRQM2YdYHoYew2uRkog\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Citalopram",
+          "quantity": 0.4,
+          "lastPickupDate": "2025-09-19"
+        },
+        {
+          "name": "Bupropion",
+          "quantity": 0.35,
+          "lastPickupDate": "2025-08-14"
+        },
+        {
+          "name": "Zolpidem",
+          "quantity": 0.1,
+          "lastPickupDate": "2025-09-29"
+        },
+        {
+          "name": "Lorazepam",
+          "quantity": 0.05,
+          "lastPickupDate": "2025-09-06"
+        },
+        {
+          "name": "Hydrochlorothiazide",
+          "quantity": 0.3,
+          "lastPickupDate": "2025-10-13"
+        },
+        {
+          "name": "Melatonin",
+          "quantity": 0.2,
+          "lastPickupDate": "2025-09-30"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-09-19",
+          "summary": "Anxiety check",
+          "notes": "Mood stabilized with Citalopram and Bupropion."
+        },
+        {
+          "date": "2025-10-13",
+          "summary": "Sleep issues",
+          "notes": "Zolpidem and Melatonin improved rest quality."
+        }
+      ],
+      "pharmacist": "Dr. Felix Aubert"
+    },
+    {
+      "username": "nathan.cho",
+      "hash": "100000:k4h9ipAnyptnJO6bmygSuw\u003d\u003d:yDqRUJhq8rBM/Vko76JtcQ\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Azithromycin",
+          "quantity": 0.25,
+          "lastPickupDate": "2025-10-04"
+        },
+        {
+          "name": "Gabapentin",
+          "quantity": 0.7,
+          "lastPickupDate": "2025-09-25"
+        },
+        {
+          "name": "Montelukast",
+          "quantity": 0.4,
+          "lastPickupDate": "2025-08-30"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-09-25",
+          "summary": "Nerve pain management",
+          "notes": "Gabapentin dosage reviewed; reduced discomfort."
+        }
+      ],
+      "pharmacist": "Dr. Tobias Vang",
+      "insurance": "Standard Health",
+      "pharmacistId": ""
+    },
+    {
+      "username": "sophia.murphy",
+      "hash": "100000:9QFWDgTerPt/xsv/sXCtLg\u003d\u003d:o0uCtAZebyLe3T4JjqnhvQ\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Clonazepam",
+          "quantity": 0.05,
+          "lastPickupDate": "2025-10-15"
+        },
+        {
+          "name": "Escitalopram",
+          "quantity": 0.4,
+          "lastPickupDate": "2025-09-10"
+        },
+        {
+          "name": "Simvastatin",
+          "quantity": 1.0,
+          "lastPickupDate": "2025-09-27"
+        },
+        {
+          "name": "Doxycycline",
+          "quantity": 0.3,
+          "lastPickupDate": "2025-08-22"
+        },
+        {
+          "name": "Metoprolol",
+          "quantity": 0.8,
+          "lastPickupDate": "2025-09-05"
+        },
+        {
+          "name": "Acetaminophen",
+          "quantity": 0.5,
+          "lastPickupDate": "2025-09-18"
+        },
+        {
+          "name": "Diazepam",
+          "quantity": 0.1,
+          "lastPickupDate": "2025-10-02"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-09-27",
+          "summary": "Cholesterol management",
+          "notes": "Simvastatin dosage maintained; positive lipid levels."
+        },
+        {
+          "date": "2025-10-15",
+          "summary": "Anxiety management",
+          "notes": "Clonazepam prescribed; follow-up in 2 weeks."
+        }
+      ],
+      "pharmacist": "Dr. Diana Diazh"
+    },
+    {
+      "username": "pepo",
+      "hash": "100000:Y+oaLTWtYsYfMrTJUUNDlg\u003d\u003d:sFk1pKzeyFDOiclkyVkSxQ\u003d\u003d",
+      "accountStatus": "LOCKED ACCOUNT",
+      "prescriptions": [
+        {
+          "name": "Hydrocodone",
+          "quantity": 0.5,
+          "lastPickupDate": "2025-07-22"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-07-22",
+          "summary": "Pain management visit",
+          "notes": "Prescribed Hydrocodone for chronic pain; account locked due to misuse."
+        }
+      ],
+      "pharmacist": "Dr. Diana Diazh"
+    },
+    {
+      "username": "asdf",
+      "hash": "100000:cT3a3VKSBKzMSOqMPQsEPQ\u003d\u003d:LEvocnwY8MxTGkhtn7wavw\u003d\u003d",
+      "prescriptions": [
+        {
+          "name": "Amoxicillin",
+          "quantity": 0.25,
+          "lastPickupDate": "2025-10-10"
+        }
+      ],
+      "healthHistory": [
+        {
+          "date": "2025-10-10",
+          "summary": "Minor infection",
+          "notes": "Prescribed Amoxicillin; full recovery expected."
+        }
+      ],
+      "pharmacist": "Dr. Diana Diazh"
+    }
+  ],
+  "insuranceOptions": [
+    "Standard Health",
+    "Family Shield",
+    "Premium Plus",
+    "Community Care"
+  ]
+}

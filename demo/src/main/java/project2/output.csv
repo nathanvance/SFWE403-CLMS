@@ -1,10 +1,11 @@
-username,password,name,age
-user8,pass321,John,22
-user1,pass123,Jane,44
-user2,pass123,Alex,43
+username,password,name,age,role
+admin,admin123,Admin User,30,admin
+user8,pass321,John,22,user
+user1,pass123,Jane,44,user
+user2,pass123,Alex,43,user
 
-user9,pass321,John,43
-user5,pass987,Ada,45
-John1,pass123,John,44
-,,,
-John54,pass123,John,55
+user9,pass321,John,43,user
+user5,pass987,Ada,45,user
+John1,pass123,John,44,user
+,,,, 
+John54,pass123,John,55,user
