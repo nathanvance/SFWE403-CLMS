@@ -50,9 +50,6 @@ public class ChangePasswordController {
         }
     }
 
-    private void showInfo(String s) {
-    }
-
     @FXML
     private void doChangePassword() {
         if (username == null || username.isBlank()) return;
@@ -62,13 +59,13 @@ public class ChangePasswordController {
         String confirm = confirmPasswordField.getText();
 
         if (resetRequired) {
-            // Admin-triggered reset flow (no current password; must honor the RESET REQUIRED flag)
+            // Admin-triggered reset flow (no current password, must honor the RESET REQUIRED flag)
             java.util.List<String> errs =
                     LoginManager.changePasswordAfterAdminReset(username, newPwd, confirm);
 
             if (errs.isEmpty()) {
                 showOk("Password updated. Please log in again.");
-                // strongly recommended: end session and go back to login so user re-authenticates
+                // end session and go back to login so user re-authenticates
                 try {
                     SessionManager.INSTANCE.clear();
                     App.setRoot("login");
@@ -81,7 +78,7 @@ public class ChangePasswordController {
             return;
         }
 
-        // Normal, self-service change while logged in
+        // Normal, self-change while logged in
         LoginManager.ChangePwdResult res =
                 LoginManager.INSTANCE.changePasswordSelf(username, oldPwd, newPwd, confirm);
 

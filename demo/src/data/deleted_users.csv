@@ -1,0 +1,5 @@
+username,hash,role,deletedAt,deletedBy,reason
+Mike,100000:yq1fldp7Z3qGEkXSsQXAIQ==:IcUGr7u5IE+GcPTMfvoQ4g==,Patient,2025-10-29T18:32:07.333411500Z,Mike,Self-request
+Amy,100000:MKSlqg6l6PNGfAkXIvw1iQ==:cD7j4IuhCmVjUziL5095zA==,Pharmacist,2025-10-29T18:58:32.806905900Z,Amy,Self-request
+Matt,100000:7PauaZPAgiaVqgza6jIY5Q==:x+1SXRA156Dyl6dQPGE9QA==,Patient,2025-11-01T04:28:33.981748100Z,Matt,Self-request
+Matt,100000:CJ7eUFyEVnS9sP3tHUq0TQ==:h9OitgXrgF+U8GQTIUGoxg==,Admin,2025-11-01T04:48:24.171896600Z,Matt,Self-request

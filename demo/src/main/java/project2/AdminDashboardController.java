@@ -23,8 +23,9 @@ public class AdminDashboardController {
     @FXML private TableColumn<UserKT, Void>   actionColumn;
 
     @FXML private Button changePasswordButton;
-    @FXML private Button refreshButton;
     @FXML private Button logoutButton;
+    @FXML private Button btnDeleteMyAccount;
+    @FXML private Button refreshButton;
 
     private ObservableList<UserKT> users;
 
