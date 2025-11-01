@@ -1,3 +1,7 @@
+# IntelliJ
+.idea/
+*.iml
+
 # Maven target directory
 target/
 
@@ -6,6 +10,10 @@ target/
 
 # Log files
 *.log
+src/data/*_fail*.csv
+src/data/login_failures.csv
+src/data/admin_notifications.log
+src/data/deleted_users.csv
 
 # BlueJ files
 *.ctxt

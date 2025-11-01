@@ -69,7 +69,9 @@
             <children>
                 <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshAssignments" text="Refresh"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="changePasswordButton" text="Change Password" onAction="#goChangePassword"/>
                 <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" text="Log Out"/>
+                <Button fx:id="btnDeleteMyAccount" text="Delete My Account" onAction="#onDeleteMyAccount"/>
             </children>
         </HBox>
     </bottom>

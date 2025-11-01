@@ -22,8 +22,10 @@
             <Label fx:id="pharmacistLabel" text="Dr. [Pharmacist]"
                    style="-fx-font-size: 14px;" />
             <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="changePasswordButton" text="Change Password" onAction="#goChangePassword"/>
             <Button fx:id="logoutButton" text="Logout" onAction="#logout"
                     style="-fx-background-color: #d33; -fx-text-fill: white;"/>
+            <Button fx:id="btnDeleteMyAccount" text="Delete My Account" onAction="#onDeleteMyAccount"/>
         </HBox>
 
         <Separator/>

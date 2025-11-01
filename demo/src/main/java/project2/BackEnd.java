@@ -13,7 +13,13 @@ public class BackEnd {
     private static final File LOGIN_FILE = new File(FILE_PATH);
 
     //function for authenticating login
-
+    private BackEnd() {}
+    public static boolean checkLogin(String username, String password) {
+        return LoginManager.usernameExists(username);
+    }
+    public static boolean createNewAccount(String username, String password, String name, String age) {
+        return LoginManager.register(username, password);
+    }
     //function for returning the list of all users in system to and display them
     public static ObservableList<User> loadUserData() {
 

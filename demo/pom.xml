@@ -12,10 +12,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.9.10</kotlin.version>
         <java.version>17</java.version>
+        <!-- Maven -->
+        <maven.compiler.release>17</maven.compiler.release>
 
         <!-- JavaFX platform classifier: "win", "mac", or "linux" -->
         <javafx.version>17.0.9</javafx.version>
         <javafx.platform>win</javafx.platform>
+
     </properties>
 
     <dependencies>
@@ -65,6 +68,27 @@
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
 
+        <resources>
+        <!-- Standard resources -->
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </resource>
+
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                    <include>**/*.css</include>
+                    <include>**/*.png</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gif</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- ✅ Kotlin Compiler Plugin -->
             <plugin>
@@ -81,7 +105,6 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>src/main/kotlin</sourceDir>
-                                <sourceDir>src/main/java</sourceDir>
                             </sourceDirs>
                             <jvmTarget>${java.version}</jvmTarget>
                         </configuration>
@@ -96,7 +119,6 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>src/test/kotlin</sourceDir>
-                                <sourceDir>src/test/java</sourceDir>
                             </sourceDirs>
                             <jvmTarget>${java.version}</jvmTarget>
                         </configuration>
@@ -109,6 +131,31 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
+
+                <executions>
+                    <!-- turn off Maven's implicit default executions so they don't run early -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+
+                    <!-- our explicit Java compile (this will run after the kotlin plugin above) -->
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals><goal>compile</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals><goal>testCompile</goal></goals>
+                    </execution>
+                </executions>
+
                 <configuration>
                     <release>${java.version}</release>
                 </configuration>
@@ -125,6 +172,36 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <!-- add src/main/java back as a source root -->
+                    <execution>
+                        <id>add-java-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>add-source</goal></goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+
+                    <!-- add src/test/java back as a test source root -->
+                    <execution>
+                        <id>add-java-test-sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals><goal>add-test-source</goal></goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- ✅ Exec plugin to run Kotlin main classes -->
             <plugin>

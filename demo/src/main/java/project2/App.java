@@ -23,7 +23,17 @@ public class App extends Application {
     }
 
     static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        Parent root = loadFXML(fxml);
+        scene.setRoot(root);
+
+        // Resize window when switching views (just for Admin)
+        javafx.stage.Stage stage = (javafx.stage.Stage) scene.getWindow();
+        if ("adminDashboard".equals(fxml)) {
+            stage.setMinWidth(950);
+            stage.setMinHeight(650);
+        }
+        stage.sizeToScene();     // snap to content’s preferred size
+        stage.centerOnScreen();  // optional
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
