@@ -108,6 +108,14 @@ public class BackEnd {
             String newPrescriptionLine = username + "," + pharmacistName + "," + prescriptionName + "," + drugName + "," + drugQuantity;
             bw.write(newPrescriptionLine);
             bw.newLine();
+
+            // Log the inventory change
+            try {
+                double quantity = Double.parseDouble(drugQuantity);
+                InventoryLogger.logInventoryChange(drugName, quantity, pharmacistName);
+            } catch (NumberFormatException e) {
+                System.err.println("Could not parse drug quantity for inventory logging: " + drugQuantity);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
