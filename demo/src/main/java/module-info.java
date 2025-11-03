@@ -4,6 +4,7 @@
      requires kotlin.stdlib;
      requires com.google.gson;
      requires org.json;
+     requires javafx.graphics;
 
      opens project2 to javafx.fxml;
      exports project2;

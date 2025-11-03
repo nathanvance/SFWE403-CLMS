@@ -45,31 +45,53 @@ public class LogInController {
         String usernameInput = usernameText.getText().trim();
         String passwordInput = passwordText.getText();
 
+        // (Optional but nice UX) quick pre-checks
+        if (!LoginManager.INSTANCE.usernameExists(usernameInput)) {
+            loginWarnings.setText("Account does not exist.");
+            loginWarnings.setVisible(true);
+            return;
+        }
+        // If you added this helper in LoginManager (as you mentioned)
+        if (LoginManager.isDeleted(usernameInput)) {
+            loginWarnings.setText("This account was deleted. Contact an administrator to restore it.");
+            loginWarnings.setVisible(true);
+            return;
+        }
+
         LoginManager.LoginResult result = LoginManager.INSTANCE.verifyLogin(usernameInput, passwordInput);
 
         switch (result.getStatus()) {
             case SUCCESS -> {
                 String role = result.getRole() != null ? result.getRole() : "Patient";
-                SessionManager.INSTANCE.startSession(usernameInput.trim(), role);
-
+                SessionManager.INSTANCE.startSession(usernameInput, role);
                 switch (role.toLowerCase()) {
-                    case "patient" -> App.setRoot("patientDashboard");
-                    case "pharmacist" -> App.setRoot("pharmacistDashboard");
-                    case "admin" -> App.setRoot("adminDashboard");
-                    default -> App.setRoot("login");
+                    case "admin"       -> App.setRoot("adminDashboard");
+                    case "pharmacist"  -> App.setRoot("pharmacistDashboard");
+                    default            -> App.setRoot("patientDashboard");
                 }
             }
-            case INVALID -> {
-                int rem = LoginManager.INSTANCE.remainingAttempts(usernameInput.trim());
-                String plural = (rem == 1 ? "" : "s");
-                loginWarnings.setText(
-                        "Username or password incorrect. " +
-                                rem + " attempt" + plural + " remaining."
-                );
+
+            case RESET_REQUIRED -> {
+                SessionManager.INSTANCE.startSession(usernameInput.trim(),
+                        result.getRole() != null ? result.getRole() : "Patient");
+                // optional: tell the user what's happening
+                loginWarnings.setText("Password reset required. Please set a new password.");
+                loginWarnings.setVisible(true);
+                App.setRoot("changePassword");
+            }
+
+            case LOCKED -> {
+                // Locked accounts can be recovered by an admin (your Admin dashboard "Recover" button)
+                loginWarnings.setText("This account is locked. Ask an admin to recover/unlock it.");
                 loginWarnings.setVisible(true);
             }
-            case LOCKED -> {
-                loginWarnings.setText("Account locked. Please contact an administrator.");
+
+            case INVALID -> {
+                int rem = LoginManager.INSTANCE.remainingAttempts(usernameInput);
+                String plural = (rem == 1 ? "" : "s");
+                loginWarnings.setText(
+                        "Username or password incorrect. " + rem + " attempt" + plural + " remaining."
+                );
                 loginWarnings.setVisible(true);
             }
         }

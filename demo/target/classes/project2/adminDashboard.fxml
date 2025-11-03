@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -10,37 +9,39 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="adminDashboardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.AdminDashboardController">
-   <children>
-      <VBox alignment="CENTER" layoutX="50.0" layoutY="30.0" prefHeight="540.0" prefWidth="700.0" spacing="20.0">
-         <children>
-            <Label text="Admin Dashboard - User Role Management" textFill="#2699a1">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            
-            <Label text="Manage User Roles and Permissions" textFill="#666666">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            
-            <TableView fx:id="userTable" prefHeight="400.0" prefWidth="700.0">
-              <columns>
-                  <TableColumn fx:id="usernameColumn" text="Username" />
-                  <TableColumn fx:id="typeColumn" text="Type" />
-                  <TableColumn fx:id="actionColumn" text="Actions" />
-              </columns>
-            </TableView>
-            
-            <HBox alignment="CENTER" spacing="20.0">
-               <children>
-                  <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshUserList" prefWidth="120.0" text="Refresh Users" />
-                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefWidth="120.0" text="Logout" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </children>
+<AnchorPane fx:id="adminDashboardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.AdminDashboardController">
+    <VBox alignment="CENTER" layoutX="50.0" layoutY="30.0" prefHeight="540.0" prefWidth="700.0" spacing="20.0">
+        <Label text="Admin Dashboard - User Role Management" textFill="#2699a1">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
+
+        <Label text="Manage User Roles and Permissions" textFill="#666666">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+
+        <TableView fx:id="userTable" prefHeight="400.0" prefWidth="700.0">
+            <columns>
+                <TableColumn fx:id="usernameColumn" text="Username"/>
+                <TableColumn fx:id="typeColumn" text="Type"/>
+                <TableColumn fx:id="actionColumn" text="Actions"/>
+            </columns>
+        </TableView>
+
+        <HBox alignment="CENTER" spacing="20.0">
+            <children>
+                <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshUserList" prefWidth="120.0"
+                        text="Refresh Users"/>
+                <Button fx:id="changePasswordButton" text="Change Password" onAction="#goChangePassword"/>
+                <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefWidth="120.0"
+                        text="Logout"/>
+                <Button fx:id="btnDeleteMyAccount" text="Delete My Account" onAction="#onDeleteMyAccount"/>
+            </children>
+        </HBox>
+    </VBox>
 </AnchorPane>

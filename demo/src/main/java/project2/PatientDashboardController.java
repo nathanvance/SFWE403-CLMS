@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 public class PatientDashboardController {
 
@@ -46,6 +47,9 @@ public class PatientDashboardController {
 
     @FXML
     private Label insuranceStatusLabel;
+
+    @FXML
+    private Button changePasswordButton;
 
     @FXML
     private Button saveInsuranceButton;
@@ -163,8 +167,58 @@ public class PatientDashboardController {
     }
 
     @FXML
+    void goChangePassword(ActionEvent event) throws IOException {
+        App.setRoot("changePassword");
+    }
+
+    @FXML
     void logout(ActionEvent event) throws IOException {
         SessionManager.INSTANCE.clear();
         App.setRoot("login");
+    }
+
+    @FXML
+    private void onDeleteMyAccount() throws IOException {
+        String currentUser = SessionManager.INSTANCE.getCurrentUsername();
+        if (currentUser == null || currentUser.isBlank()) {
+            new Alert(Alert.AlertType.INFORMATION, "No active session.", ButtonType.OK).showAndWait();
+            return;
+        }
+
+        // 1) Password prompt
+        PasswordField pf = new PasswordField();
+        pf.setPromptText("Password");
+        VBox box = new VBox(8, new Label("Re-enter your password to delete this account:"), pf);
+
+        Alert pwdDlg = new Alert(Alert.AlertType.CONFIRMATION);
+        pwdDlg.setTitle("Confirm Deletion");
+        pwdDlg.getDialogPane().setContent(box);
+        pwdDlg.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+
+        var r1 = pwdDlg.showAndWait();
+        if (r1.isEmpty() || r1.get() != ButtonType.OK) return;
+        String pwd = pf.getText();
+
+        // 2) Are you sure?
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "This will permanently delete your account.",
+                ButtonType.OK, ButtonType.CANCEL);
+        confirm.setTitle("Are you sure?");
+        confirm.getButtonTypes().setAll(new ButtonType("Delete"), ButtonType.CANCEL);
+
+        var r2 = confirm.showAndWait();
+        if (r2.isEmpty() || r2.get().getButtonData().isCancelButton()) return;
+
+        // 3) Call LoginManager
+        boolean ok = LoginManager.deleteSelf(currentUser, pwd); // static call
+
+        new Alert(Alert.AlertType.INFORMATION,
+                ok ? "Account deleted." : "Delete failed. Check your password and try again.",
+                ButtonType.OK).showAndWait();
+
+        if (ok) {
+            SessionManager.INSTANCE.clear();
+            App.setRoot("login");
+        }
     }
 }
