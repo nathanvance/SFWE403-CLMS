@@ -109,12 +109,20 @@ public class BackEnd {
             bw.write(newPrescriptionLine);
             bw.newLine();
 
-            // Log the inventory change
+            // Track the inventory usage for this prescription
             try {
                 double quantity = Double.parseDouble(drugQuantity);
-                InventoryLogger.logInventoryChange(drugName, quantity, pharmacistName);
+                InventoryManager.recordChange(
+                        drugName,
+                        -quantity,
+                        InventoryChange.DISPENSED,
+                        pharmacistName,
+                        "Prescription: " + prescriptionName
+                );
             } catch (NumberFormatException e) {
                 System.err.println("Could not parse drug quantity for inventory logging: " + drugQuantity);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Inventory update failed: " + e.getMessage());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,7 +130,6 @@ public class BackEnd {
     }
 
 }
-
 
 
 
