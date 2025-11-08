@@ -10,6 +10,7 @@ object LoginManager {
     val loginHolder = File("src/data/user_pass.csv")
     private val failuresFile = File("src/data/login_failures.csv")
     private val adminNotifyLog = File("src/data/admin_notifications.log")
+    private val userProfileFile = File("src/data/user_profiles.csv")
 
     data class LoginEntry(val hash: String, val role: String)
 
@@ -41,10 +42,22 @@ object LoginManager {
     data class FailureInfo(var attempts: Int = 0, var lastFailedAt: String? = null)
 
     @JvmStatic
-    fun register(username: String, password: String): Boolean {
+    fun register(username: String, password: String): Boolean =
+        register(username, password, null)
+
+    @JvmStatic
+    fun register(username: String, password: String, profile: RegistrationProfile?): Boolean {
         if (logins.containsKey(username)) {
             println("Username '$username' already exists!")
             return false
+        }
+
+        profile?.let {
+            val validationErrors = RegistrationValidator.validate(it)
+            if (validationErrors.isNotEmpty()) {
+                println("Cannot register user `$username` due to invalid profile: ${validationErrors.joinToString("; ")}")
+                return false
+            }
         }
 
         val hash = PasswordHash.hashPWD(password.toCharArray())
@@ -54,6 +67,9 @@ object LoginManager {
         locked[username] = false
         failures[username] = FailureInfo(0, null)
         persistFailures()
+
+        profile?.let { persistProfile(it.withUsername(username)) }
+
         println("Successfully registered user `$username`")
         return true
     }
@@ -280,6 +296,18 @@ object LoginManager {
             val now = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
             adminNotifyLog.parentFile?.mkdirs()
             adminNotifyLog.appendText("$now | LOCKOUT | user=$username\n")
+        }
+    }
+
+    private fun persistProfile(profile: RegistrationProfile) {
+        ensureProfileFileReady()
+        FileUtils.appendToFile(userProfileFile, listOf(profile.toCsvRow()))
+    }
+
+    private fun ensureProfileFileReady() {
+        userProfileFile.parentFile?.mkdirs()
+        if (!userProfileFile.exists() || userProfileFile.length() == 0L) {
+            userProfileFile.writeText("username,fullName,dateOfBirth,email,phone\n")
         }
     }
 

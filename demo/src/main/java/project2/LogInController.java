@@ -1,6 +1,7 @@
 package project2;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class LogInController {
     private VBox loginPanel, registerPanel;
 
     @FXML
-    private TextField usernameText, regUsername;
+    private TextField usernameText, regUsername, regFullName, regDob, regEmail, regPhone;
 
     @FXML
     private PasswordField passwordText, regPassword, regPasswordConfirmation;
@@ -29,7 +30,15 @@ public class LogInController {
     @FXML
     public void initialize() {
         loginFields = Arrays.asList(usernameText, passwordText);
-        registerFields = Arrays.asList(regUsername, regPassword, regPasswordConfirmation);
+        registerFields = Arrays.asList(
+                regUsername,
+                regPassword,
+                regPasswordConfirmation,
+                regFullName,
+                regDob,
+                regEmail,
+                regPhone
+        );
 
         for (TextInputControl field : loginFields) {
             enterHandler(field);
@@ -116,10 +125,18 @@ public class LogInController {
         String pass = regPassword.getText().trim();
         String confirmation = regPasswordConfirmation.getText();
 
-        List<String> errors = LoginManager.INSTANCE.passwordChecks(user, pass, confirmation);
+        RegistrationProfile profile = new RegistrationProfile(
+                user,
+                getText(regFullName),
+                getText(regDob),
+                getText(regEmail),
+                getText(regPhone)
+        );
+        List<String> errors = new ArrayList<>(LoginManager.INSTANCE.passwordChecks(user, pass, confirmation));
+        errors.addAll(RegistrationValidator.validate(profile));
 
         if (errors.isEmpty()) {
-            boolean success = LoginManager.INSTANCE.register(user, pass);
+            boolean success = LoginManager.INSTANCE.register(user, pass, profile);
             if (success) {
                 showLoginPanel(null); // go back to login on success
             } else {
@@ -149,5 +166,9 @@ public class LogInController {
                 }
             }
         });
+    }
+
+    private String getText(TextInputControl control) {
+        return control == null ? "" : control.getText().trim();
     }
 }
