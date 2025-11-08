@@ -45,6 +45,12 @@ public class PharmacistDashboardController {
     private Button refreshButton;
 
     @FXML
+    private Button addTestButton;
+
+    @FXML
+    private Button viewTestHistoryButton;
+
+    @FXML
     private Button logoutButton;
 
     private final ObservableList<PharmacistAssignment> assignments = FXCollections.observableArrayList();
@@ -90,6 +96,16 @@ public class PharmacistDashboardController {
     @FXML
     void goChangePassword(ActionEvent event) throws IOException {
         App.setRoot("changePassword");
+    }
+
+    @FXML
+    void openAddTestForm(ActionEvent event) throws IOException {
+        App.setRoot("TestEntryForm");
+    }
+
+    @FXML
+    void viewTestHistory(ActionEvent event) throws IOException {
+        App.setRoot("testHistory");
     }
 
     @FXML
@@ -151,4 +167,3 @@ public class PharmacistDashboardController {
         assignments.setAll(items);
     }
 }
-

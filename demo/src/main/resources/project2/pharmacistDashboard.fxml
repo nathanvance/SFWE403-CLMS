@@ -68,6 +68,8 @@
             </padding>
             <children>
                 <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshAssignments" text="Refresh"/>
+                <Button fx:id="addTestButton" mnemonicParsing="false" onAction="#openAddTestForm" text="Add Test"/>
+                <Button fx:id="viewTestHistoryButton" mnemonicParsing="false" onAction="#viewTestHistory" text="View Test History"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="changePasswordButton" text="Change Password" onAction="#goChangePassword"/>
                 <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" text="Log Out"/>
@@ -76,4 +78,3 @@
         </HBox>
     </bottom>
 </BorderPane>
-

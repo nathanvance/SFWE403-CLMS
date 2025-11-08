@@ -107,7 +107,7 @@ public class TestEntryFormController {
 
     @FXML
     private void handleGoBackButton() throws IOException {
-        App.setRoot("secondary");
+        App.setRoot("pharmacistDashboard");
     }
 
 }
