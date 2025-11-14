@@ -13,7 +13,9 @@ public class BackEnd {
     private static final File LOGIN_FILE = new File(FILE_PATH);
 
     //function for authenticating login
-    private BackEnd() {}
+    private BackEnd() {
+    }
+
     public static boolean checkLogin(String username, String password) {
         return LoginManager.usernameExists(username);
     }
