@@ -3,7 +3,7 @@ package project2
 import java.io.File
 
 object UserManager {
-    private val user_data = File("demo/src/data/user_pass.csv")
+    private val user_data = File("src/data/user_pass.csv")
     private val users = parseFile();
 
     private fun parseFile(): MutableMap<String, UserKT> {

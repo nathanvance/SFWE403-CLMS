@@ -17,7 +17,7 @@ class Patient(user: String, passHash: String) : UserKT(user, passHash) {
     }
 
     private fun loadDataFromJson() {
-        val file = File("demo/src/data/patient_data.json")
+        val file = File("src/data/patient_data.json")
         if (!file.exists()) {
             println("⚠️ JSON file not found at ${file.absolutePath}")
             return
@@ -136,7 +136,7 @@ class Patient(user: String, passHash: String) : UserKT(user, passHash) {
     }
 
     companion object {
-        private val gson = Gson()
+        private val gson = Gson();
 
         fun loadAllPatients(): List<Patient> {
             val file = File("src/data/patient_data.json")

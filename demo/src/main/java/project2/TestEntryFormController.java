@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 
 public class TestEntryFormController {
-    private static final String FILE_PATH = "demo/src/data/TestEntries.csv";
+    private static final String FILE_PATH = "src/data/TestEntries.csv";
 
     @FXML private TextField reportIDField;
     @FXML private TextField reportDateTimeField;
