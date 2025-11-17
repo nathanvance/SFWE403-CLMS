@@ -45,20 +45,6 @@ object FileUtils {
         return file.readLines().find { it.contains(query) }
     }
 
-    fun appendLine(file: File, lineQuery: String, data: List<String>): Boolean {
-        if (!file.exists()) return false
-        val lines = file.readLines().toMutableList()
-        val index = lines.indexOfFirst { it.contains(lineQuery) }
-        if (index == -1) return false
-
-        // CSV-safe: join with commas, no extra spaces
-        val appendText = data.joinToString(",")
-        lines[index] = lines[index] + "," + appendText
-
-        file.writeText(lines.joinToString(System.lineSeparator()))
-        return true
-    }
-
     fun deleteLine(file: File, query: String): Boolean {
         if (!file.exists()) return false
 

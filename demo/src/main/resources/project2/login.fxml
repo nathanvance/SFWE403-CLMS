@@ -42,7 +42,7 @@
             <children>
                 <!-- LOGIN PANEL -->
                 <VBox fx:id="loginPanel" spacing="10" alignment="CENTER">
-                    <Label text="Pharmacy Management System" textFill="#2699a1" wrapText="true">
+                    <Label text="Clinical Laboratory Management System" textFill="#2699a1" wrapText="true">
                         <font>
                             <Font name="System Bold" size="20.0"/>
                         </font>

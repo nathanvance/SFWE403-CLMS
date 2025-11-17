@@ -5,7 +5,7 @@ object SessionManager {
     var currentRole: String? = null
 
     fun startSession(username: String, role: String?) {
-        LoginManager.resetFailures(username);
+        LoginManager.resetFailures(username)
         currentUsername = username
         currentRole = role
     }

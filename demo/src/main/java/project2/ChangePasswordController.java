@@ -97,16 +97,6 @@ public class ChangePasswordController {
         }
     }
 
-    private void clearFields() {
-        if (!resetRequired) oldPasswordField.clear();
-        newPasswordField.clear();
-        confirmPasswordField.clear();
-    }
-
-    private void goBackToMainSilently() {
-        try { goBackToMain(); } catch (IOException ignored) {}
-    }
-
     @FXML
     private void goBackToMain() throws IOException {
         // send them back to their dashboard based on role

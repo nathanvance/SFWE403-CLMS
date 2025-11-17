@@ -27,8 +27,6 @@ public class AdminDashboardController {
     @FXML private Button btnDeleteMyAccount;
     @FXML private Button refreshButton;
 
-    private ObservableList<UserKT> users;
-
     @FXML
     public void initialize() {
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -39,7 +37,7 @@ public class AdminDashboardController {
 
     /** Role select + conditional Recover/Restore buttons. */
     private void setupActionColumn() {
-        actionColumn.setCellFactory(col -> new TableCell<UserKT, Void>() {
+        actionColumn.setCellFactory(col -> new TableCell<>() {
 
             private final ComboBox<String> typeCombo =
                     new ComboBox<>(FXCollections.observableArrayList("Patient", "Pharmacist", "Admin"));
@@ -121,7 +119,7 @@ public class AdminDashboardController {
     @FXML
     void refreshUserList() {
         Collection<UserKT> allUsers = UserManager.INSTANCE.getAllUsers();
-        users = FXCollections.observableArrayList(allUsers);
+        ObservableList<UserKT> users = FXCollections.observableArrayList(allUsers);
         userTable.setItems(users);
     }
 

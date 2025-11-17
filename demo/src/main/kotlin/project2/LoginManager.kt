@@ -92,12 +92,6 @@ object LoginManager {
     }
 
     @JvmStatic
-    fun verifyPassword(username: String, plain: String): Boolean {
-        val entry = logins[username] ?: return false
-        return PasswordHash.verifyPWD(plain.toCharArray(), entry.hash)
-    }
-
-    @JvmStatic
     fun changePasswordSelf(username: String, current: String, newPwd: String, confirm: String): ChangePwdResult {
         val entry = logins[username] ?: return ChangePwdResult.ERROR
 
@@ -261,8 +255,6 @@ object LoginManager {
         return true
     }
 
-    fun getAttempts(username: String): Int = failures[username]?.attempts ?: 0
-
     fun resetFailures(username: String) {
         val info = failures.getOrPut(username) { FailureInfo() }
         info.attempts = 0
@@ -365,93 +357,6 @@ object LoginManager {
 
         val now = java.time.format.DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now())
         adminNotifyLog.appendText("$now | PASSWORD_RESET_COMPLETE | user=$username\n")
-        return emptyList()
-    }
-
-    @JvmStatic
-    fun deleteUser(performedBy: String, targetUsername: String, reason: String = "N/A"): Boolean {
-        // Only Admin can delete, and don't allow deleting yourself
-        val actorRole = logins[performedBy]?.role ?: return false
-        val isAdmin = actorRole.equals("Admin", true) || actorRole.equals("Manager", true)
-        if (!isAdmin || performedBy.equals(targetUsername, ignoreCase = true)) return false
-        if (!loginHolder.exists()) return false
-
-        val targetLine = FileUtils.findLine(loginHolder, "$targetUsername,") ?: return false
-        val parts = targetLine.split(",").toMutableList()
-
-        // Already deleted
-        if (parts.any { it.equals("DELETED ACCOUNT", ignoreCase = true) }) return true
-
-        // Archive current record
-        val deletedCsv = java.io.File("src/data/deleted_users.csv")
-        deletedCsv.parentFile?.mkdirs()
-        if (!deletedCsv.exists()) {
-            deletedCsv.writeText("username,hash,role,deletedAt,deletedBy,reason\n")
-        }
-
-        val now = java.time.format.DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now())
-        val role = parts.getOrNull(2)?.trim().takeUnless { it.isNullOrBlank() } ?: "Patient"
-        val archiveLine = listOf(targetUsername, parts.getOrNull(1)?.trim().orEmpty(), role, now, performedBy, reason.replace(",", " ")
-        ).joinToString(",")
-        FileUtils.appendToFile(deletedCsv, listOf(archiveLine))
-
-        // Mark as deleted
-        val updated = (parts + "DELETED ACCOUNT").joinToString(",")
-        val ok = FileUtils.replaceInFile(loginHolder, targetLine, updated)
-        if (!ok) return false
-
-        locked[targetUsername] = true
-        resetFailures(targetUsername)
-        refreshLogins()
-        locked = parseLocked()
-
-        adminNotifyLog.parentFile?.mkdirs()
-        adminNotifyLog.appendText("$now | DELETE | user=$targetUsername by=$performedBy reason=$reason\n")
-        return true
-    }
-
-    @JvmStatic
-    fun changePassword(username: String, currentPwd: String, newPwd: String, confirm: String): List<String> {
-        val entry = logins[username] ?: return listOf("User does not exist.")
-
-        // Must match current password
-        if (!PasswordHash.verifyPWD(currentPwd.toCharArray(), entry.hash)) {
-            return listOf("Current password is incorrect.")
-        }
-        // Do not allow the old password to be reused
-        if (PasswordHash.verifyPWD(newPwd.toCharArray(), entry.hash)) {
-            return listOf("New password cannot match the current password.")
-        }
-
-        val errs = buildList {
-            if (!newPwd.contains(Regex("[0-9]"))) add("Password must contain a number! (0-9)")
-            if (!newPwd.contains(Regex("[A-Z]"))) add("Password must contain an uppercase letter!")
-            if (!newPwd.contains(Regex("[a-z]"))) add("Password must contain a lowercase letter!")
-            if (!newPwd.contains(Regex("[^A-Za-z0-9]"))) add("Password must contain a special character!")
-            if (newPwd != confirm) add("Password and confirmation do not match!")
-        }
-        if (errs.isNotEmpty()) return errs
-
-        val newHash = PasswordHash.hashPWD(newPwd.toCharArray())
-
-        // Write the new hash, keep role and any flags
-        val ok = updateUserCsvLine(username) { parts ->
-            val role = parts.getOrNull(2)?.trim().takeUnless { it.isNullOrBlank() } ?: "Patient"
-            val flags = if (parts.size > 3) parts.drop(3) else emptyList()
-            listOf(username, newHash, role) + flags
-        }
-        if (!ok) return listOf("Failed to update password on disk.")
-
-        // If Admin had set RESET REQUIRED for this user, clear it
-        val line = FileUtils.findLine(loginHolder, "$username,")
-        if (line != null && line.split(",").any { it.equals("RESET REQUIRED", true) }) {
-            val cleared = line.split(",").filterNot { it.equals("RESET REQUIRED", true) }.joinToString(",")
-            FileUtils.replaceInFile(loginHolder, line, cleared)
-            refreshLogins()
-        }
-
-        val now = java.time.format.DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now())
-        adminNotifyLog.appendText("$now | PASSWORD_CHANGE | user=$username\n")
         return emptyList()
     }
 
