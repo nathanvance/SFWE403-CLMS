@@ -7,9 +7,9 @@ import java.time.format.DateTimeFormatter
 object LoginManager {
     private const val MAX_ATTEMPTS = 5
 
-    val loginHolder = File("src/data/user_pass.csv")
-    private val failuresFile = File("src/data/login_failures.csv")
-    private val adminNotifyLog = File("src/data/admin_notifications.log")
+    val loginHolder = File("demo/src/data/user_pass.csv")
+    private val failuresFile = File("demo/src/data/login_failures.csv")
+    private val adminNotifyLog = File("demo/src/data/admin_notifications.log")
 
     data class LoginEntry(val hash: String, val role: String)
 

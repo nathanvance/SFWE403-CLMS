@@ -3,7 +3,7 @@ package project2
 import java.io.File
 
 object UserManager {
-    private val user_data = File("src/data/user_pass.csv")
+    private val user_data = File("demo/src/data/user_pass.csv")
     private val users = parseFile();
 
     private fun parseFile(): MutableMap<String, UserKT> {
@@ -17,9 +17,9 @@ object UserManager {
         val lines = user_data.readLines();
 
         for (line in lines) {
-            var pair = line.split(",");
+            val pair = line.split(",");
             if (pair.size < 3) continue;
-            var type = pair[2];
+            val type = pair[2];
 
             when (type) {
                 "Patient" -> map[pair[0]] = Patient(pair[0], pair[1]);
