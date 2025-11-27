@@ -13,6 +13,13 @@ object InventoryLogger {
         loadDataFromJson();
     }
 
+    fun updateItem(name: String, change: InventoryChange): Boolean {
+        val item = findObjectElseNull(name) ?: return false
+        item.applyChange(change)
+        saveToJson()
+        return true
+    }
+
     fun findObjectElseNull(name: String): InventoryObject? {
         return items.find { it.name.contains(name) }
     }
@@ -47,8 +54,50 @@ object InventoryLogger {
         items.add(inventoryObject);
     }
 
+    private fun saveToJson() {
+        val gson = Gson();
+        val inventoryMap = mutableMapOf<String, Any>()
+        for (item in items) {
+            val itemJson = mapOf(
+                "name" to item.name,
+                "quantity" to item.quantity,
+                "minamount" to item.min,
+                "changes" to item.changes.map { (date, qty) ->
+                    listOf(date.toInstant().toString(), qty)
+                }
+            )
+
+            inventoryMap["drugs"] = itemJson
+        }
+        val root = mapOf(
+            "inventory items" to inventoryMap
+        )
+        val jsonText = gson.toJson(root)
+        file.writeText((jsonText))
+
+        println("Saved current inventory to JSON file.")
+    }
+
 }
 
-data class InventoryObject(val name: String, val quantity: Int, val min: Int, val changes: HashMap<Date, Int>);
+data class InventoryObject(
+    var name: String,
+    var quantity: Int,
+    var min: Int,
+    var changes: HashMap<Date, Int>
+) {
+    fun applyChange(change: InventoryChange) {
+        when (change) {
+            is QuantityChange.SetQuantity -> quantity = change.newVal
+            is QuantityChange.AddQuantity -> quantity += change.amount
+            is QuantityChange.DecreaseQuantity -> quantity -= change.amount
+            is InventoryChange.Rename -> name = change.newName
+            is InventoryChange.SetMin -> min = change.min
+        }
+
+        if (change is QuantityChange) return
+        changes[Date()] = quantity
+    }
+}
 
 
