@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.InventoryDashboardController">
+    <top>
+        <VBox alignment="CENTER_LEFT" spacing="8.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="16.0" left="24.0" right="24.0" top="24.0"/>
+            </padding>
+            <Label text="Inventory Management Dashboard" textFill="#2699a1">
+                <font>
+                    <Font name="System Bold" size="26.0"/>
+                </font>
+            </Label>
+            <Label text="View stock levels and submit inventory requests"/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" BorderPane.alignment="CENTER">
+            <VBox spacing="20.0">
+                <padding>
+                    <Insets left="24.0" right="24.0" top="10.0" bottom="20.0"/>
+                </padding>
+
+                <!-- Stock Visualization Section -->
+                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
+                    <Label text="Stock Level Visualization" textFill="#2699a1">
+                        <font>
+                            <Font name="System Bold" size="18.0"/>
+                        </font>
+                    </Label>
+
+                    <HBox spacing="15.0" alignment="CENTER_LEFT">
+                        <Label text="Select Item:"/>
+                        <ComboBox fx:id="itemSelector" prefWidth="250.0"/>
+                    </HBox>
+
+                    <HBox spacing="30.0" alignment="CENTER_LEFT">
+                        <VBox spacing="5.0">
+                            <Label text="Current Stock:" style="-fx-font-weight: bold;"/>
+                            <Label fx:id="currentStockLabel" text="0" style="-fx-font-size: 24px;"/>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <Label text="Minimum Stock:" style="-fx-font-weight: bold;"/>
+                            <Label fx:id="minStockLabel" text="0" style="-fx-font-size: 24px;"/>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <Label text="Status:" style="-fx-font-weight: bold;"/>
+                            <Label fx:id="stockStatusLabel" text="N/A" style="-fx-font-size: 16px;"/>
+                        </VBox>
+                    </HBox>
+
+                    <LineChart fx:id="stockChart" prefHeight="300.0">
+                        <xAxis>
+                            <NumberAxis fx:id="xAxis" side="BOTTOM"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="yAxis" side="LEFT"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <!-- Request Form Section -->
+                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
+                    <Label text="Submit Inventory Request" textFill="#2699a1">
+                        <font>
+                            <Font name="System Bold" size="18.0"/>
+                        </font>
+                    </Label>
+
+                    <GridPane hgap="15.0" vgap="12.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="120.0"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Item Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="requestItemName" editable="true" prefWidth="300.0"
+                                  promptText="Select or type item name"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Quantity:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Spinner fx:id="requestQuantity" editable="true" prefWidth="150.0"
+                                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Reason:" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+                               GridPane.valignment="TOP">
+                            <padding>
+                                <Insets top="5.0"/>
+                            </padding>
+                        </Label>
+                        <TextArea fx:id="requestReason" promptText="Explain why this item is needed..." 
+                                 prefHeight="80.0" wrapText="true"
+                                 GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </GridPane>
+
+                    <HBox spacing="10.0">
+                        <Button fx:id="submitRequestButton" text="Submit Request" onAction="#submitRequest"
+                                style="-fx-background-color: #2699a1; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- My Requests Section -->
+                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
+                    <Label text="My Requests" textFill="#2699a1">
+                        <font>
+                            <Font name="System Bold" size="18.0"/>
+                        </font>
+                    </Label>
+
+                    <TableView fx:id="myRequestsTable" prefHeight="250.0">
+                        <columns>
+                            <TableColumn fx:id="itemNameColumn" prefWidth="120.0" text="Item Name"/>
+                            <TableColumn fx:id="quantityColumn" prefWidth="80.0" text="Quantity"/>
+                            <TableColumn fx:id="reasonColumn" prefWidth="200.0" text="My Reason"/>
+                            <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status"/>
+                            <TableColumn fx:id="dateColumn" prefWidth="140.0" text="Date"/>
+                            <TableColumn fx:id="notesColumn" prefWidth="200.0" text="Admin Notes"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="12.0" BorderPane.alignment="CENTER_LEFT">
+            <padding>
+                <Insets bottom="20.0" left="24.0" right="24.0" top="12.0"/>
+            </padding>
+            <Button fx:id="backButton" text="← Back to Dashboard" onAction="#goBack"/>
+            <Button fx:id="refreshButton" text="🔄 Refresh Data" onAction="#refreshData"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </bottom>
+</BorderPane>

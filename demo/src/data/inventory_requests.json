@@ -1,0 +1,38 @@
+[
+  {
+    "adminNotes": "Approved, Save him please",
+    "reason": "We need this ASAP",
+    "pharmacistUsername": "andy",
+    "itemName": "Advil",
+    "reviewDate": "2025-11-28T01:42:36.222Z",
+    "requestDate": "2025-11-28T01:41:52.450Z",
+    "requestedQuantity": 1,
+    "id": "0f04bba2-d622-4190-a4ba-11a6e436f871",
+    "reviewedBy": "andyadmin",
+    "status": "APPROVED"
+  },
+  {
+    "adminNotes": "ok",
+    "reason": "Second case of the day, we need this again",
+    "pharmacistUsername": "andy",
+    "itemName": "Advil",
+    "reviewDate": "2025-11-28T01:50:03.766Z",
+    "requestDate": "2025-11-28T01:49:41.946Z",
+    "requestedQuantity": 2,
+    "id": "36e80261-0afe-4e0f-a6f9-a45719415e0b",
+    "reviewedBy": "andyadmin",
+    "status": "APPROVED"
+  },
+  {
+    "adminNotes": "",
+    "reason": "Request for testing inventory change",
+    "pharmacistUsername": "andy",
+    "itemName": "Advil",
+    "reviewDate": "2025-11-28T01:54:02.018Z",
+    "requestDate": "2025-11-28T01:53:32.383Z",
+    "requestedQuantity": 4,
+    "id": "10be8f3a-dec2-46ad-b3df-782a37a0aad8",
+    "reviewedBy": "andyadmin",
+    "status": "APPROVED"
+  }
+]
