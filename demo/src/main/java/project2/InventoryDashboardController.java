@@ -1,5 +1,6 @@
 package project2;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -17,29 +19,49 @@ import java.util.*;
 
 public class InventoryDashboardController {
 
-    @FXML private ComboBox<String> itemSelector;
-    @FXML private LineChart<Number, Number> stockChart;
-    @FXML private NumberAxis xAxis;
-    @FXML private NumberAxis yAxis;
-    @FXML private Label currentStockLabel;
-    @FXML private Label minStockLabel;
-    @FXML private Label stockStatusLabel;
+    @FXML
+    private ComboBox<String> itemSelector;
+    @FXML
+    private LineChart<Number, Number> stockChart;
+    @FXML
+    private NumberAxis xAxis;
+    @FXML
+    private NumberAxis yAxis;
+    @FXML
+    private Label currentStockLabel;
+    @FXML
+    private Label minStockLabel;
+    @FXML
+    private Label stockStatusLabel;
 
-    @FXML private ComboBox<String> requestItemName;
-    @FXML private Spinner<Integer> requestQuantity;
-    @FXML private TextArea requestReason;
-    @FXML private Button submitRequestButton;
+    @FXML
+    private ComboBox<String> requestItemName;
+    @FXML
+    private Spinner<Integer> requestQuantity;
+    @FXML
+    private TextArea requestReason;
+    @FXML
+    private Button submitRequestButton;
 
-    @FXML private TableView<InventoryRequestDisplay> myRequestsTable;
-    @FXML private TableColumn<InventoryRequestDisplay, String> itemNameColumn;
-    @FXML private TableColumn<InventoryRequestDisplay, Integer> quantityColumn;
-    @FXML private TableColumn<InventoryRequestDisplay, String> reasonColumn;
-    @FXML private TableColumn<InventoryRequestDisplay, String> statusColumn;
-    @FXML private TableColumn<InventoryRequestDisplay, String> dateColumn;
-    @FXML private TableColumn<InventoryRequestDisplay, String> notesColumn;
+    @FXML
+    private TableView<InventoryRequestDisplay> myRequestsTable;
+    @FXML
+    private TableColumn<InventoryRequestDisplay, String> itemNameColumn;
+    @FXML
+    private TableColumn<InventoryRequestDisplay, Integer> quantityColumn;
+    @FXML
+    private TableColumn<InventoryRequestDisplay, String> reasonColumn;
+    @FXML
+    private TableColumn<InventoryRequestDisplay, String> statusColumn;
+    @FXML
+    private TableColumn<InventoryRequestDisplay, String> dateColumn;
+    @FXML
+    private TableColumn<InventoryRequestDisplay, String> notesColumn;
 
-    @FXML private Button backButton;
-    @FXML private Button refreshButton;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button refreshButton;
 
     private final ObservableList<InventoryRequestDisplay> myRequests = FXCollections.observableArrayList();
     private String currentUsername;
@@ -62,14 +84,14 @@ public class InventoryDashboardController {
     private void setupItemSelector() {
         List<InventoryObject> items = InventoryLogger.INSTANCE.getAllItems();
         ObservableList<String> itemNames = FXCollections.observableArrayList();
-        
+
         for (InventoryObject item : items) {
             itemNames.add(item.getName());
         }
 
         itemSelector.setItems(itemNames);
         itemSelector.setPromptText("Select an item to view");
-        
+
         itemSelector.setOnAction(e -> {
             String selected = itemSelector.getValue();
             if (selected != null && !selected.isBlank()) {
@@ -94,7 +116,7 @@ public class InventoryDashboardController {
 
     private void setupRequestForm() {
         SpinnerValueFactory<Integer> valueFactory =
-            new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, 1);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, 1);
         requestQuantity.setValueFactory(valueFactory);
         requestQuantity.setEditable(true);
 
@@ -138,10 +160,10 @@ public class InventoryDashboardController {
         boolean isLowStock = item.isLowStock();
         if (isLowStock) {
             stockStatusLabel.setText("⚠ LOW STOCK");
-            stockStatusLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            stockStatusLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: red; -fx-font-weight: bold;");
         } else {
             stockStatusLabel.setText("✓ Adequate Stock");
-            stockStatusLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+            stockStatusLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: green; -fx-font-weight: bold;");
         }
 
         // Update chart
@@ -177,16 +199,14 @@ public class InventoryDashboardController {
         for (Map.Entry<Date, Integer> entry : sortedChanges) {
             long diffInMillis = now.getTime() - entry.getKey().getTime();
             long daysAgo = diffInMillis / (1000 * 60 * 60 * 24);
-            
+
             stockSeries.getData().add(new XYChart.Data<>(-daysAgo, entry.getValue()));
-            minSeries.getData().add(new XYChart.Data<>(-daysAgo, item.getMin()));
         }
 
         // Add current stock
         stockSeries.getData().add(new XYChart.Data<>(0, item.getQuantity()));
-        minSeries.getData().add(new XYChart.Data<>(0, item.getMin()));
 
-        stockChart.getData().addAll(stockSeries, minSeries);
+        stockChart.getData().addAll(stockSeries);
         stockChart.setLegendVisible(true);
     }
 
@@ -213,10 +233,10 @@ public class InventoryDashboardController {
 
         try {
             InventoryRequest request = InventoryRequestService.INSTANCE.createRequest(
-                currentUsername,
-                itemName,
-                quantity,
-                reason
+                    currentUsername,
+                    itemName,
+                    quantity,
+                    reason
             );
 
             showInfo("Request submitted successfully!");
@@ -239,10 +259,10 @@ public class InventoryDashboardController {
     void refreshData(ActionEvent event) {
         InventoryLogger.INSTANCE.refresh();
         InventoryRequestService.INSTANCE.refresh();
-        
+
         setupItemSelector();
         loadMyRequests();
-        
+
         String selected = itemSelector.getValue();
         if (selected != null && !selected.isBlank()) {
             displayItemData(selected);
@@ -282,12 +302,12 @@ public class InventoryDashboardController {
 
         for (InventoryRequest req : requests) {
             myRequests.add(new InventoryRequestDisplay(
-                req.getItemName(),
-                req.getRequestedQuantity(),
-                req.getReason(),
-                req.getStatus().name(),
-                dateFormat.format(req.getRequestDate()),
-                req.getAdminNotes() != null ? req.getAdminNotes() : ""
+                    req.getItemName(),
+                    req.getRequestedQuantity(),
+                    req.getReason(),
+                    req.getStatus().name(),
+                    dateFormat.format(req.getRequestDate()),
+                    req.getAdminNotes() != null ? req.getAdminNotes() : ""
             ));
         }
     }
@@ -327,11 +347,28 @@ public class InventoryDashboardController {
             this.adminNotes = adminNotes;
         }
 
-        public String getItemName() { return itemName; }
-        public Integer getQuantity() { return quantity; }
-        public String getReason() { return reason; }
-        public String getStatus() { return status; }
-        public String getDateString() { return dateString; }
-        public String getAdminNotes() { return adminNotes; }
+        public String getItemName() {
+            return itemName;
+        }
+
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public String getDateString() {
+            return dateString;
+        }
+
+        public String getAdminNotes() {
+            return adminNotes;
+        }
     }
 }

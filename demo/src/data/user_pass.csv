@@ -1,6 +1,6 @@
 username,hash(iterations:salt:hash),usertype,accountstatus
 amelde,100000:hbgexDKBPsEMqT3JPD5Dfw==:WGSMEMm6ZQVru+ULbqOlUA==,Patient
-asdf,100000:cT3a3VKSBKzMSOqMPQsEPQ==:LEvocnwY8MxTGkhtn7wavw==,Patient,RESET REQUIRED,LOCKED ACCOUNT
+asdf,100000:cT3a3VKSBKzMSOqMPQsEPQ==:LEvocnwY8MxTGkhtn7wavw==,Patient,RESET REQUIRED
 pepo,100000:Y+oaLTWtYsYfMrTJUUNDlg==:sFk1pKzeyFDOiclkyVkSxQ==,Pharmacist
 nathanvance,100000:xRONc0QQeiD7YyspNlKYBQ==:yEoZXLftYb3FrRMme6Drmg==,Admin
 andrew.taylor,100000:CaaXh5g1cCebBy6Z6QczLg==:xAl4IX8Bc0o3yBxG3QooDg==,Patient

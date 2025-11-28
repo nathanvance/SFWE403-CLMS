@@ -76,17 +76,6 @@
                 <include>**/*</include>
             </includes>
         </resource>
-
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.fxml</include>
-                    <include>**/*.css</include>
-                    <include>**/*.png</include>
-                    <include>**/*.jpg</include>
-                    <include>**/*.gif</include>
-                </includes>
-            </resource>
         </resources>
 
         <plugins>

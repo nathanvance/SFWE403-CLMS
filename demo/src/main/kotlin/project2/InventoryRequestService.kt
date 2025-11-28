@@ -17,23 +17,19 @@ object InventoryRequestService {
         loadFromJson()
     }
 
-    fun createRequest(
-        pharmacistUsername: String,
-        itemName: String,
-        quantity: Int,
-        reason: String
-    ): InventoryRequest {
-        val request = InventoryRequest()
-        request.id = UUID.randomUUID().toString()
-        request.pharmacistUsername = pharmacistUsername
-        request.itemName = itemName
-        request.requestedQuantity = quantity
-        request.reason = reason
-        request.requestDate = Date()
-        request.status = InventoryRequest.RequestStatus.PENDING
-        request.reviewedBy = null
-        request.reviewDate = null
-        request.adminNotes = null
+    fun createRequest(pharmacistUsername: String, itemName: String, quantity: Int, reason: String): InventoryRequest {
+        val request = InventoryRequest(
+            UUID.randomUUID().toString(),
+            pharmacistUsername,
+            itemName,
+            quantity,
+            reason,
+            Date(),
+            InventoryRequest.RequestStatus.PENDING,
+            null,
+            null,
+            null
+        )
 
         requests.add(request)
         saveToJson()
@@ -112,7 +108,8 @@ object InventoryRequestService {
                 request.requestDate = dateFormat.parse(jsonObj.getString("requestDate"))
                 request.status = InventoryRequest.RequestStatus.valueOf(jsonObj.getString("status"))
                 request.reviewedBy = if (jsonObj.isNull("reviewedBy")) null else jsonObj.getString("reviewedBy")
-                request.reviewDate = if (jsonObj.isNull("reviewDate")) null else dateFormat.parse(jsonObj.getString("reviewDate"))
+                request.reviewDate =
+                    if (jsonObj.isNull("reviewDate")) null else dateFormat.parse(jsonObj.getString("reviewDate"))
                 request.adminNotes = if (jsonObj.isNull("adminNotes")) null else jsonObj.getString("adminNotes")
 
                 requests.add(request)
@@ -141,7 +138,10 @@ object InventoryRequestService {
                 jsonObj.put("requestDate", dateFormat.format(request.requestDate))
                 jsonObj.put("status", request.status.name)
                 jsonObj.put("reviewedBy", request.reviewedBy)
-                jsonObj.put("reviewDate", if (request.reviewDate != null) dateFormat.format(request.reviewDate) else null)
+                jsonObj.put(
+                    "reviewDate",
+                    if (request.reviewDate != null) dateFormat.format(request.reviewDate) else null
+                )
                 jsonObj.put("adminNotes", request.adminNotes)
 
                 jsonArray.put(jsonObj)
