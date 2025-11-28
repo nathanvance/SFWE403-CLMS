@@ -68,8 +68,6 @@
             </padding>
             <children>
                 <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshAssignments" text="Refresh"/>
-                <Button fx:id="viewInventoryButton" mnemonicParsing="false" onAction="#viewInventory"
-                        text="📦 View Inventory" style="-fx-background-color: #2699a1; -fx-text-fill: white;"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="changePasswordButton" text="Change Password" onAction="#goChangePassword"/>
                 <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" text="Log Out"/>

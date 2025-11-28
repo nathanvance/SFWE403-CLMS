@@ -6,7 +6,7 @@ import java.io.File
 import java.util.Date
 
 object InventoryLogger {
-    val file = File("src/data/drug_changes.json");
+    val file = File("src/drug_changes.json");
     val items: MutableSet<InventoryObject> = mutableSetOf();
 
     init {
@@ -21,23 +21,7 @@ object InventoryLogger {
     }
 
     fun findObjectElseNull(name: String): InventoryObject? {
-        return items.find { it.name.contains(name, ignoreCase = true) }
-    }
-
-    fun getAllItems(): List<InventoryObject> {
-        return items.toList()
-    }
-
-    fun addNewItem(name: String, quantity: Int, minAmount: Int): InventoryObject {
-        val item = InventoryObject(name, quantity, minAmount, HashMap())
-        items.add(item)
-        saveToJson()
-        return item
-    }
-
-    fun refresh() {
-        items.clear()
-        loadDataFromJson()
+        return items.find { it.name.contains(name) }
     }
 
     private fun loadDataFromJson() {
@@ -51,42 +35,28 @@ object InventoryLogger {
         val rootMap: Map<String, Any> = gson.fromJson(jsonText, mapType);
 
         val inventoryItems = rootMap["inventory items"] as? Map<*, *> ?: return
-        val drugsData = inventoryItems["drugs"]
+        val drugMap = inventoryItems["drugs"] as? Map<*, *> ?: return
 
-        // Handle both single object and array of objects
-        val drugsList = when (drugsData) {
-            is List<*> -> drugsData
-            is Map<*, *> -> listOf(drugsData)
-            else -> return
+        val name = drugMap["name"] as? String ?: return;
+        val quantity = (drugMap["quantity"] as? Number ?: return).toInt();
+        val minAmount = (drugMap["minamount"] as? Number ?: return).toInt()
+        val changesList = drugMap["changes"] as? List<List<*>> ?: return;
+
+        val changesMap = HashMap<Date, Int>()
+        for (entry in changesList) {
+            val dateString = entry[0] as? String ?: return;
+            val amount = (entry[1] as? Number ?: return).toInt()
+            val date = Date.from(java.time.Instant.parse(dateString))
+            changesMap[date] = amount
         }
 
-        for (drugData in drugsList) {
-            val drugMap = drugData as? Map<*, *> ?: continue
-
-            val name = drugMap["name"] as? String ?: continue
-            val quantity = (drugMap["quantity"] as? Number ?: continue).toInt()
-            val minAmount = (drugMap["minamount"] as? Number ?: continue).toInt()
-            val changesList = drugMap["changes"] as? List<List<*>> ?: continue
-
-            val changesMap = HashMap<Date, Int>()
-            for (entry in changesList) {
-                val dateString = entry[0] as? String ?: continue
-                val amount = (entry[1] as? Number ?: continue).toInt()
-                val date = Date.from(java.time.Instant.parse(dateString))
-                changesMap[date] = amount
-            }
-
-            val inventoryObject = InventoryObject(name, quantity, minAmount, changesMap)
-            items.add(inventoryObject)
-        }
-
-        println("Loaded ${items.size} inventory items from JSON")
+        val inventoryObject = InventoryObject(name, quantity, minAmount, changesMap);
+        items.add(inventoryObject);
     }
 
     private fun saveToJson() {
         val gson = Gson();
-        val drugsList = mutableListOf<Map<String, Any>>()
-
+        val inventoryMap = mutableMapOf<String, Any>()
         for (item in items) {
             val itemJson = mapOf(
                 "name" to item.name,
@@ -96,15 +66,16 @@ object InventoryLogger {
                     listOf(date.toInstant().toString(), qty)
                 }
             )
-            drugsList.add(itemJson)
+
+            inventoryMap["drugs"] = itemJson
         }
-
-        val inventoryMap = mapOf("drugs" to drugsList)
-        val root = mapOf("inventory items" to inventoryMap)
+        val root = mapOf(
+            "inventory items" to inventoryMap
+        )
         val jsonText = gson.toJson(root)
-        file.writeText(jsonText)
+        file.writeText((jsonText))
 
-        println("Saved ${items.size} inventory items to JSON file.")
+        println("Saved current inventory to JSON file.")
     }
 
 }
@@ -124,17 +95,8 @@ data class InventoryObject(
             is InventoryChange.SetMin -> min = change.min
         }
 
-        if (change is QuantityChange) {
-            changes[Date()] = quantity
-        }
-    }
-
-    fun getChangesHistory(): Map<Date, Int> {
-        return changes.toSortedMap()
-    }
-
-    fun isLowStock(): Boolean {
-        return quantity <= min
+        if (change is QuantityChange) return
+        changes[Date()] = quantity
     }
 }
 

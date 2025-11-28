@@ -26,7 +26,6 @@ public class AdminDashboardController {
     @FXML private Button logoutButton;
     @FXML private Button btnDeleteMyAccount;
     @FXML private Button refreshButton;
-    @FXML private Button viewInventoryRequestsButton;
 
     private ObservableList<UserKT> users;
 
@@ -139,11 +138,6 @@ public class AdminDashboardController {
     @FXML
     void logout(ActionEvent event) throws IOException {
         App.setRoot("login");
-    }
-
-    @FXML
-    void viewInventoryRequests(ActionEvent event) throws IOException {
-        App.setRoot("adminInventoryRequests");
     }
 
     // Self-delete for the currently-logged-in admin account.

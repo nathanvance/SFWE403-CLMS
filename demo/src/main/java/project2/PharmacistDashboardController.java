@@ -47,9 +47,6 @@ public class PharmacistDashboardController {
     @FXML
     private Button logoutButton;
 
-    @FXML
-    private Button viewInventoryButton;
-
     private final ObservableList<PharmacistAssignment> assignments = FXCollections.observableArrayList();
 
     @FXML
@@ -99,11 +96,6 @@ public class PharmacistDashboardController {
     void logout(ActionEvent event) throws IOException {
         SessionManager.INSTANCE.clear();
         App.setRoot("login");
-    }
-
-    @FXML
-    void viewInventory(ActionEvent event) throws IOException {
-        App.setRoot("inventoryDashboard");
     }
 
     @FXML

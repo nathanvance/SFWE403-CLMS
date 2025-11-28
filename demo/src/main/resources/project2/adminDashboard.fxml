@@ -37,8 +37,6 @@
             <children>
                 <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshUserList" prefWidth="120.0"
                         text="Refresh Users"/>
-                <Button fx:id="viewInventoryRequestsButton" mnemonicParsing="false" onAction="#viewInventoryRequests"
-                        text="📦 Inventory Requests" style="-fx-background-color: #2699a1; -fx-text-fill: white;"/>
                 <Button fx:id="changePasswordButton" text="Change Password" onAction="#goChangePassword"/>
                 <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefWidth="120.0"
                         text="Logout"/>
