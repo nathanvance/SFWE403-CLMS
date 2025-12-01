@@ -43,7 +43,7 @@ public class AdminDashboardController {
         actionColumn.setCellFactory(col -> new TableCell<UserKT, Void>() {
 
             private final ComboBox<String> typeCombo =
-                    new ComboBox<>(FXCollections.observableArrayList("Patient", "Pharmacist", "Admin"));
+                    new ComboBox<>(FXCollections.observableArrayList("Patient", "Pharmacist", "Admin", "Management"));
 
             {
                 typeCombo.setOnAction(e -> {
@@ -143,7 +143,7 @@ public class AdminDashboardController {
 
     @FXML
     void viewInventoryRequests(ActionEvent event) throws IOException {
-        App.setRoot("adminInventoryRequests");
+        App.setRoot("inventoryDashboard");
     }
 
     // Self-delete for the currently-logged-in admin account.

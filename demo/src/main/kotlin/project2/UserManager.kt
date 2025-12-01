@@ -4,7 +4,11 @@ import java.io.File
 
 object UserManager {
     private val user_data = File("src/data/user_pass.csv")
-    private val users = parseFile();
+    private var users = parseFile();
+
+    fun refreshUsers() {
+        users = parseFile();
+    }
 
     private fun parseFile(): MutableMap<String, UserKT> {
         val map = mutableMapOf<String, UserKT>();
@@ -25,6 +29,7 @@ object UserManager {
                 "Patient" -> map[pair[0]] = Patient(pair[0], pair[1]);
                 "Admin" -> map[pair[0]] = Admin(pair[0], pair[1]);
                 "Pharmacist" -> map[pair[0]] = Pharmacist(pair[0], pair[1]);
+                "Management" -> map[pair[0]] = Management(pair[0], pair[1]);
             }
         }
         return map;

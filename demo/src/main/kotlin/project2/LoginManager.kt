@@ -55,6 +55,7 @@ object LoginManager {
         failures[username] = FailureInfo(0, null)
         persistFailures()
         println("Successfully registered user `$username`")
+        UserManager.refreshUsers()
         return true
     }
 
@@ -490,6 +491,7 @@ object LoginManager {
             val user = parts.firstOrNull()?.trim() ?: return@forEach
             map[user] = parts.any { it.equals("LOCKED ACCOUNT", ignoreCase = true) }
         }
+
         return map
     }
 

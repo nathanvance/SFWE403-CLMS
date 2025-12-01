@@ -1,6 +1,5 @@
 package project2;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,7 +9,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -19,90 +18,88 @@ import java.util.*;
 
 public class InventoryDashboardController {
 
-    @FXML
-    private ComboBox<String> itemSelector;
-    @FXML
-    private LineChart<Number, Number> stockChart;
-    @FXML
-    private NumberAxis xAxis;
-    @FXML
-    private NumberAxis yAxis;
-    @FXML
-    private Label currentStockLabel;
-    @FXML
-    private Label minStockLabel;
-    @FXML
-    private Label stockStatusLabel;
+    // ================= STOCK VISUALIZATION UI =================
 
-    @FXML
-    private ComboBox<String> requestItemName;
-    @FXML
-    private Spinner<Integer> requestQuantity;
-    @FXML
-    private TextArea requestReason;
-    @FXML
-    private Button submitRequestButton;
+    @FXML private ComboBox<String> itemSelector;
+    @FXML private LineChart<Number, Number> stockChart;
+    @FXML private NumberAxis xAxis;
+    @FXML private NumberAxis yAxis;
 
-    @FXML
-    private TableView<InventoryRequestDisplay> myRequestsTable;
-    @FXML
-    private TableColumn<InventoryRequestDisplay, String> itemNameColumn;
-    @FXML
-    private TableColumn<InventoryRequestDisplay, Integer> quantityColumn;
-    @FXML
-    private TableColumn<InventoryRequestDisplay, String> reasonColumn;
-    @FXML
-    private TableColumn<InventoryRequestDisplay, String> statusColumn;
-    @FXML
-    private TableColumn<InventoryRequestDisplay, String> dateColumn;
-    @FXML
-    private TableColumn<InventoryRequestDisplay, String> notesColumn;
+    @FXML private Label currentStockLabel;
+    @FXML private Label minStockLabel;
+    @FXML private Label stockStatusLabel;
 
-    @FXML
-    private Button backButton;
-    @FXML
-    private Button refreshButton;
+    // ================= INVENTORY REQUEST REVIEW UI =================
 
-    private final ObservableList<InventoryRequestDisplay> myRequests = FXCollections.observableArrayList();
-    private String currentUsername;
+    @FXML private TableView<InventoryRequestRow> pendingRequestsTable;
+    @FXML private TableColumn<InventoryRequestRow, String> pharmacistColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> itemColumn;
+    @FXML private TableColumn<InventoryRequestRow, Integer> quantityColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> reasonColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> dateColumn;
+    @FXML private TableColumn<InventoryRequestRow, Void> actionsColumn;
 
+    @FXML private TableView<InventoryRequestRow> allRequestsTable;
+    @FXML private TableColumn<InventoryRequestRow, String> allPharmacistColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> allItemColumn;
+    @FXML private TableColumn<InventoryRequestRow, Integer> allQuantityColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> allStatusColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> allDateColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> reviewedByColumn;
+    @FXML private TableColumn<InventoryRequestRow, String> adminNotesColumn;
+
+    @FXML private Button backButton;
+    @FXML private Button viewInventoryButton;
+    @FXML private Button refreshButton;
+
+    private final ObservableList<InventoryRequestRow> pendingRequests = FXCollections.observableArrayList();
+    private final ObservableList<InventoryRequestRow> allRequests = FXCollections.observableArrayList();
+
+    private String currentAdminUsername;
+
+    // ==========================================================
+    // INITIALIZE CONTROLLER
+    // ==========================================================
     @FXML
     public void initialize() {
-        currentUsername = SessionManager.INSTANCE.getCurrentUsername();
-        if (currentUsername == null || currentUsername.isBlank()) {
+
+        currentAdminUsername = SessionManager.INSTANCE.getCurrentUsername();
+        if (currentAdminUsername == null || currentAdminUsername.isBlank()) {
             showError("No active session. Please log in.");
             return;
         }
 
-        setupItemSelector();
         setupStockChart();
-        setupRequestForm();
-        setupRequestsTable();
-        loadMyRequests();
+        setupItemSelector();
+
+        setupPendingRequestsTable();
+        setupAllRequestsTable();
+
+        loadAllRequestData();
     }
+
+    // ==========================================================
+    // STOCK VISUALIZATION SETUP
+    // ==========================================================
 
     private void setupItemSelector() {
         List<InventoryObject> items = InventoryLogger.INSTANCE.getAllItems();
         ObservableList<String> itemNames = FXCollections.observableArrayList();
-
-        for (InventoryObject item : items) {
-            itemNames.add(item.getName());
-        }
+        items.forEach(i -> itemNames.add(i.getName()));
 
         itemSelector.setItems(itemNames);
         itemSelector.setPromptText("Select an item to view");
 
         itemSelector.setOnAction(e -> {
-            String selected = itemSelector.getValue();
-            if (selected != null && !selected.isBlank()) {
-                displayItemData(selected);
+            String name = itemSelector.getValue();
+            if (name != null && !name.isBlank()) {
+                updateStockDisplay(name);
             }
         });
 
-        // Auto-select first item if available
         if (!itemNames.isEmpty()) {
             itemSelector.setValue(itemNames.get(0));
-            displayItemData(itemNames.get(0));
+            updateStockDisplay(itemNames.get(0));
         }
     }
 
@@ -114,51 +111,14 @@ public class InventoryDashboardController {
         stockChart.setLegendVisible(false);
     }
 
-    private void setupRequestForm() {
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, 1);
-        requestQuantity.setValueFactory(valueFactory);
-        requestQuantity.setEditable(true);
-
-        // Populate item dropdown with existing inventory items
-        List<InventoryObject> items = InventoryLogger.INSTANCE.getAllItems();
-        ObservableList<String> itemNames = FXCollections.observableArrayList();
-
-        for (InventoryObject item : items) {
-            itemNames.add(item.getName());
-        }
-
-        requestItemName.setItems(itemNames);
-        requestItemName.setPromptText("Select or type item name");
-        requestItemName.setEditable(true); // Allow typing new items too
-    }
-
-    private void setupRequestsTable() {
-        itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        reasonColumn.setCellValueFactory(new PropertyValueFactory<>("reason"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateString"));
-        notesColumn.setCellValueFactory(new PropertyValueFactory<>("adminNotes"));
-
-        myRequestsTable.setItems(myRequests);
-        myRequestsTable.setPlaceholder(new Label("No requests submitted yet."));
-    }
-
-    private void displayItemData(String itemName) {
+    private void updateStockDisplay(String itemName) {
         InventoryObject item = InventoryLogger.INSTANCE.findObjectElseNull(itemName);
-        if (item == null) {
-            showError("Item not found: " + itemName);
-            return;
-        }
+        if (item == null) return;
 
-        // Update labels
         currentStockLabel.setText(String.valueOf(item.getQuantity()));
         minStockLabel.setText(String.valueOf(item.getMin()));
 
-        // Update status
-        boolean isLowStock = item.isLowStock();
-        if (isLowStock) {
+        if (item.isLowStock()) {
             stockStatusLabel.setText("⚠ LOW STOCK");
             stockStatusLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: red; -fx-font-weight: bold;");
         } else {
@@ -166,94 +126,192 @@ public class InventoryDashboardController {
             stockStatusLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: green; -fx-font-weight: bold;");
         }
 
-        // Update chart
         updateChart(item);
     }
 
     private void updateChart(InventoryObject item) {
         stockChart.getData().clear();
 
-        Map<Date, Integer> changes = item.getChangesHistory();
-        if (changes.isEmpty()) {
-            // If no history, show current stock only
-            XYChart.Series<Number, Number> series = new XYChart.Series<>();
-            series.setName("Stock Level");
-            series.getData().add(new XYChart.Data<>(0, item.getQuantity()));
-            stockChart.getData().add(series);
-            return;
-        }
+        Map<Date, Integer> history = item.getChangesHistory();
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
-        // Create series for stock levels
-        XYChart.Series<Number, Number> stockSeries = new XYChart.Series<>();
-        stockSeries.setName("Stock Level");
-
-        XYChart.Series<Number, Number> minSeries = new XYChart.Series<>();
-        minSeries.setName("Minimum Level");
-
-        // Sort changes by date
-        List<Map.Entry<Date, Integer>> sortedChanges = new ArrayList<>(changes.entrySet());
-        sortedChanges.sort(Map.Entry.comparingByKey());
-
-        // Calculate days ago for each point
         Date now = new Date();
-        for (Map.Entry<Date, Integer> entry : sortedChanges) {
-            long diffInMillis = now.getTime() - entry.getKey().getTime();
-            long daysAgo = diffInMillis / (1000 * 60 * 60 * 24);
 
-            stockSeries.getData().add(new XYChart.Data<>(-daysAgo, entry.getValue()));
+        List<Map.Entry<Date, Integer>> entries = new ArrayList<>(history.entrySet());
+        entries.sort(Map.Entry.comparingByKey());
+
+        for (var entry : entries) {
+            long diff = now.getTime() - entry.getKey().getTime();
+            long daysAgo = diff / (1000 * 60 * 60 * 24);
+            series.getData().add(new XYChart.Data<>(-daysAgo, entry.getValue()));
         }
 
-        // Add current stock
-        stockSeries.getData().add(new XYChart.Data<>(0, item.getQuantity()));
-
-        stockChart.getData().addAll(stockSeries);
-        stockChart.setLegendVisible(true);
+        series.getData().add(new XYChart.Data<>(0, item.getQuantity()));
+        stockChart.getData().add(series);
     }
 
-    @FXML
-    void submitRequest(ActionEvent event) {
-        String itemName = requestItemName.getValue();
-        String reason = requestReason.getText();
-        Integer quantity = requestQuantity.getValue();
+    // ==========================================================
+    // REQUEST REVIEW SETUP
+    // ==========================================================
 
-        if (itemName == null || itemName.isBlank()) {
-            showError("Please select or enter an item name.");
-            return;
+    private void setupPendingRequestsTable() {
+        pharmacistColumn.setCellValueFactory(new PropertyValueFactory<>("pharmacist"));
+        itemColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        reasonColumn.setCellValueFactory(new PropertyValueFactory<>("reason"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateString"));
+
+        setupActionsColumn();
+        pendingRequestsTable.setItems(pendingRequests);
+    }
+
+    private void setupActionsColumn() {
+        actionsColumn.setCellFactory(col -> new TableCell<>() {
+
+            private final Button approveBtn = new Button("✓ Approve");
+            private final Button denyBtn = new Button("✗ Deny");
+            private final HBox hbox = new HBox(8, approveBtn, denyBtn);
+
+            {
+                approveBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+                denyBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+                approveBtn.setOnAction(e -> {
+                    InventoryRequestRow row = getTableView().getItems().get(getIndex());
+                    approveRequest(row);
+                });
+
+                denyBtn.setOnAction(e -> {
+                    InventoryRequestRow row = getTableView().getItems().get(getIndex());
+                    denyRequest(row);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void ignore, boolean empty) {
+                super.updateItem(ignore, empty);
+                setGraphic(empty ? null : hbox);
+            }
+        });
+    }
+
+    private void setupAllRequestsTable() {
+        allPharmacistColumn.setCellValueFactory(new PropertyValueFactory<>("pharmacist"));
+        allItemColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        allQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        allStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        allDateColumn.setCellValueFactory(new PropertyValueFactory<>("dateString"));
+        reviewedByColumn.setCellValueFactory(new PropertyValueFactory<>("reviewedBy"));
+        adminNotesColumn.setCellValueFactory(new PropertyValueFactory<>("adminNotes"));
+
+        allRequestsTable.setItems(allRequests);
+    }
+
+    // ==========================================================
+    // LOAD REQUESTS
+    // ==========================================================
+
+    private void loadAllRequestData() {
+        pendingRequests.clear();
+        allRequests.clear();
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        for (InventoryRequest req : InventoryRequestService.INSTANCE.getPendingRequests()) {
+            pendingRequests.add(new InventoryRequestRow(
+                    req.getId(),
+                    req.getPharmacistUsername(),
+                    req.getItemName(),
+                    req.getRequestedQuantity(),
+                    req.getReason(),
+                    req.getStatus().name(),
+                    df.format(req.getRequestDate()),
+                    req.getReviewedBy(),
+                    req.getAdminNotes()
+            ));
         }
 
-        if (reason == null || reason.isBlank()) {
-            showError("Please provide a reason for this request.");
-            return;
+        for (InventoryRequest req : InventoryRequestService.INSTANCE.getAllRequests()) {
+            allRequests.add(new InventoryRequestRow(
+                    req.getId(),
+                    req.getPharmacistUsername(),
+                    req.getItemName(),
+                    req.getRequestedQuantity(),
+                    req.getReason(),
+                    req.getStatus().name(),
+                    df.format(req.getRequestDate()),
+                    req.getReviewedBy(),
+                    req.getAdminNotes()
+            ));
         }
+    }
 
-        if (quantity == null || quantity <= 0) {
-            showError("Please enter a valid quantity.");
-            return;
-        }
+    // ==========================================================
+    // APPROVE / DENY LOGIC
+    // ==========================================================
 
-        try {
-            InventoryRequest request = InventoryRequestService.INSTANCE.createRequest(
-                    currentUsername,
-                    itemName,
-                    quantity,
-                    reason
+    private void approveRequest(InventoryRequestRow row) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Approve Request");
+        dialog.setHeaderText("Approve request for " + row.getItemName());
+        dialog.setContentText("Admin Notes (optional):");
+
+        dialog.showAndWait().ifPresent(notes -> {
+
+            boolean ok = InventoryRequestService.INSTANCE.approveRequest(
+                    row.getRequestId(),
+                    currentAdminUsername,
+                    notes
             );
 
-            showInfo("Request submitted successfully!");
+            if (ok) {
+                InventoryObject item = InventoryLogger.INSTANCE.findObjectElseNull(row.getItemName());
+                if (item != null) {
+                    InventoryLogger.INSTANCE.updateItem(
+                            row.getItemName(),
+                            new QuantityChange.DecreaseQuantity(row.getQuantity())
+                    );
+                }
+                showInfo("Request approved.");
+            } else {
+                showError("Failed to approve request.");
+            }
 
-            // Clear form
-            requestItemName.setValue(null);
-            requestReason.clear();
-            requestQuantity.getValueFactory().setValue(1);
-
-            // Refresh requests table
-            loadMyRequests();
-
-        } catch (Exception e) {
-            showError("Failed to submit request: " + e.getMessage());
-            e.printStackTrace();
-        }
+            loadAllRequestData();
+        });
     }
+
+    private void denyRequest(InventoryRequestRow row) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Deny Request");
+        dialog.setHeaderText("Deny request for " + row.getItemName());
+        dialog.setContentText("Reason for denial:");
+
+        dialog.showAndWait().ifPresent(notes -> {
+
+            if (notes.isBlank()) {
+                showError("Reason required.");
+                return;
+            }
+
+            boolean ok = InventoryRequestService.INSTANCE.denyRequest(
+                    row.getRequestId(),
+                    currentAdminUsername,
+                    notes
+            );
+
+            if (ok) {
+                showInfo("Request denied.");
+                loadAllRequestData();
+            } else {
+                showError("Failed to deny request.");
+            }
+        });
+    }
+
+    // ==========================================================
+    // BUTTON ACTIONS
+    // ==========================================================
 
     @FXML
     void refreshData(ActionEvent event) {
@@ -261,114 +319,146 @@ public class InventoryDashboardController {
         InventoryRequestService.INSTANCE.refresh();
 
         setupItemSelector();
-        loadMyRequests();
-
-        String selected = itemSelector.getValue();
-        if (selected != null && !selected.isBlank()) {
-            displayItemData(selected);
-        }
+        loadAllRequestData();
 
         showInfo("Data refreshed!");
     }
 
     @FXML
-    void goBack(ActionEvent event) {
-        try {
-            String role = LoginManager.INSTANCE.getRole(currentUsername);
-            if (role == null) role = "Patient";
-
-            switch (role.toLowerCase()) {
-                case "admin":
-                    App.setRoot("adminDashboard");
-                    break;
-                case "pharmacist":
-                    App.setRoot("pharmacistDashboard");
-                    break;
-                default:
-                    App.setRoot("patientDashboard");
-                    break;
-            }
-        } catch (IOException e) {
-            showError("Failed to navigate back: " + e.getMessage());
-            e.printStackTrace();
+    void goBack(ActionEvent event) throws IOException {
+        if (SessionManager.INSTANCE.getCurrentRole() == null) App.setRoot("login");
+        if (SessionManager.INSTANCE.getCurrentRole().equalsIgnoreCase("admin")) {
+            App.setRoot("adminDashboard");
+        } else {
+            App.setRoot("login");
         }
     }
 
-    private void loadMyRequests() {
-        List<InventoryRequest> requests = InventoryRequestService.INSTANCE.getRequestsByPharmacist(currentUsername);
-        myRequests.clear();
+    // ==========================================================
+    // UTILITY METHODS
+    // ==========================================================
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private void showError(String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
+        a.showAndWait();
+    }
 
-        for (InventoryRequest req : requests) {
-            myRequests.add(new InventoryRequestDisplay(
-                    req.getItemName(),
-                    req.getRequestedQuantity(),
-                    req.getReason(),
-                    req.getStatus().name(),
-                    dateFormat.format(req.getRequestDate()),
-                    req.getAdminNotes() != null ? req.getAdminNotes() : ""
-            ));
+    private void showInfo(String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        a.showAndWait();
+    }
+
+    // ==========================================================
+// FOOTER NAVIGATION
+// ==========================================================
+
+    @FXML
+    void goChangePassword(ActionEvent event) throws IOException {
+        App.setRoot("changePassword");
+    }
+
+    @FXML
+    void logout(ActionEvent event) throws IOException {
+        SessionManager.INSTANCE.clear();
+        App.setRoot("login");
+    }
+
+    @FXML
+    void goGoBack(ActionEvent even) throws IOException {
+        if (!Objects.equals(SessionManager.INSTANCE.getCurrentRole(), "Admin")) {
+            App.setRoot("login");
+        } else {
+            App.setRoot("adminDashboard");
         }
     }
 
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    @FXML
+    private void onDeleteMyAccount() throws IOException {
+        String currentUser = SessionManager.INSTANCE.getCurrentUsername();
+        if (currentUser == null || currentUser.isBlank()) {
+            showError("No active session.");
+            return;
+        }
+
+        // --- password prompt ---
+        PasswordField pf = new PasswordField();
+        pf.setPromptText("Password");
+        VBox box = new VBox(8,
+                new Label("Re-enter your password to delete this account:"),
+                pf
+        );
+
+        Alert pwdDlg = new Alert(Alert.AlertType.CONFIRMATION);
+        pwdDlg.setTitle("Confirm Deletion");
+        pwdDlg.getDialogPane().setContent(box);
+        pwdDlg.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+
+        var r1 = pwdDlg.showAndWait();
+        if (r1.isEmpty() || r1.get() != ButtonType.OK) return;
+
+        String pwd = pf.getText();
+
+        // --- final confirmation ---
+        Alert confirm = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "This will permanently delete your account.",
+                new ButtonType("Delete"),
+                ButtonType.CANCEL
+        );
+
+        var r2 = confirm.showAndWait();
+        if (r2.isEmpty() || r2.get().getButtonData().isCancelButton()) return;
+
+        boolean ok = LoginManager.deleteSelf(currentUser, pwd);
+
+        if (ok) {
+            showInfo("Account deleted.");
+            SessionManager.INSTANCE.clear();
+            App.setRoot("login");
+        } else {
+            showError("Delete failed. Check password and try again.");
+        }
     }
 
-    private void showInfo(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
-    // Display class for TableView
-    public static class InventoryRequestDisplay {
+    // ==========================================================
+    // ROW MODEL
+    // ==========================================================
+
+    public static class InventoryRequestRow {
+        private final String requestId;
+        private final String pharmacist;
         private final String itemName;
         private final Integer quantity;
         private final String reason;
         private final String status;
         private final String dateString;
+        private final String reviewedBy;
         private final String adminNotes;
 
-        public InventoryRequestDisplay(String itemName, Integer quantity, String reason,
-                                       String status, String dateString, String adminNotes) {
+        public InventoryRequestRow(String requestId, String pharmacist, String itemName,
+                                   Integer quantity, String reason, String status,
+                                   String dateString, String reviewedBy, String adminNotes) {
+
+            this.requestId = requestId;
+            this.pharmacist = pharmacist;
             this.itemName = itemName;
             this.quantity = quantity;
             this.reason = reason;
             this.status = status;
             this.dateString = dateString;
-            this.adminNotes = adminNotes;
+            this.reviewedBy = reviewedBy == null ? "" : reviewedBy;
+            this.adminNotes = adminNotes == null ? "" : adminNotes;
         }
 
-        public String getItemName() {
-            return itemName;
-        }
-
-        public Integer getQuantity() {
-            return quantity;
-        }
-
-        public String getReason() {
-            return reason;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public String getDateString() {
-            return dateString;
-        }
-
-        public String getAdminNotes() {
-            return adminNotes;
-        }
+        public String getRequestId() { return requestId; }
+        public String getPharmacist() { return pharmacist; }
+        public String getItemName() { return itemName; }
+        public Integer getQuantity() { return quantity; }
+        public String getReason() { return reason; }
+        public String getStatus() { return status; }
+        public String getDateString() { return dateString; }
+        public String getReviewedBy() { return reviewedBy; }
+        public String getAdminNotes() { return adminNotes; }
     }
 }

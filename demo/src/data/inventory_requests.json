@@ -46,5 +46,29 @@
     "id": "3969fdc7-38c5-4016-947e-46091b05bba6",
     "reviewedBy": "nathanvance",
     "status": "APPROVED"
+  },
+  {
+    "adminNotes": "sure",
+    "reason": "asdf",
+    "pharmacistUsername": "jackson.reed",
+    "itemName": "Aspirin",
+    "reviewDate": "2025-11-30T20:26:42.547Z",
+    "requestDate": "2025-11-30T20:21:30.478Z",
+    "requestedQuantity": 1,
+    "id": "73155922-3c24-403a-9c74-6a3b82a280b8",
+    "reviewedBy": "nathanvance",
+    "status": "APPROVED"
+  },
+  {
+    "adminNotes": "You can't have it.",
+    "reason": "I need it.",
+    "pharmacistUsername": "nathanvance",
+    "itemName": "Aspirin",
+    "reviewDate": "2025-11-30T21:11:29.792Z",
+    "requestDate": "2025-11-30T21:11:00.126Z",
+    "requestedQuantity": 1,
+    "id": "f26fa232-de80-4023-ac8b-d48cab653def",
+    "reviewedBy": "jackson.reed",
+    "status": "DENIED"
   }
 ]

@@ -1,16 +1,17 @@
 username,hash(iterations:salt:hash),usertype,accountstatus
-amelde,100000:hbgexDKBPsEMqT3JPD5Dfw==:WGSMEMm6ZQVru+ULbqOlUA==,Patient
+amelde,100000:hbgexDKBPsEMqT3JPD5Dfw==:WGSMEMm6ZQVru+ULbqOlUA==,Management
 asdf,100000:cT3a3VKSBKzMSOqMPQsEPQ==:LEvocnwY8MxTGkhtn7wavw==,Patient,RESET REQUIRED
 pepo,100000:Y+oaLTWtYsYfMrTJUUNDlg==:sFk1pKzeyFDOiclkyVkSxQ==,Pharmacist
-nathanvance,100000:xRONc0QQeiD7YyspNlKYBQ==:yEoZXLftYb3FrRMme6Drmg==,Admin
-andrew.taylor,100000:CaaXh5g1cCebBy6Z6QczLg==:xAl4IX8Bc0o3yBxG3QooDg==,Patient
+nathanvance,100000:xRONc0QQeiD7YyspNlKYBQ==:yEoZXLftYb3FrRMme6Drmg==,Pharmacist
+andrew.taylor,100000:CaaXh5g1cCebBy6Z6QczLg==:xAl4IX8Bc0o3yBxG3QooDg==,Patient,RESET REQUIRED
 mia_fernandez,100000:NXkpLW5BmtZdResgMC9SFQ==:HcwQQ9zN2zYi4PA9+3gF4Q==,Pharmacist
-jackson.reed,100000:rlPoB04uIb1aXyLn+xay6Q==:9PSit+J4J58eujN2SBPEsA==,Pharmacist
+jackson.reed,100000:rlPoB04uIb1aXyLn+xay6Q==:9PSit+J4J58eujN2SBPEsA==,Management
 olivia_wright,100000:L1wpJx8Y7o+OHZn7CS5pyw==:PlIDRQM2YdYHoYew2uRkog==,Patient
-nathan.cho,100000:k4h9ipAnyptnJO6bmygSuw==:yDqRUJhq8rBM/Vko76JtcQ==,Admin
+nathan.cho,100000:k4h9ipAnyptnJO6bmygSuw==:yDqRUJhq8rBM/Vko76JtcQ==,Patient
 sophia.murphy,100000:9QFWDgTerPt/xsv/sXCtLg==:o0uCtAZebyLe3T4JjqnhvQ==,Patient
 Amy,100000:kN49/dwBIzuWj+zWUHujHw==:OFLcIsLDwUyy0wStPjJLxQ==,Pharmacist
 Kyle,100000:vwkjAPrg3yEkWUujcufNXQ==:oCeBjgUQ3SAF/7DkPXrNKw==,Patient
 Matt,100000:MMh9zyEmGlgV+rzRMrB6Ng==:TJ7eCQQu3RF4BSyFDl5/HA==,Admin
 andy,100000:8hZJVClZXesVtZtAs7a7fA==:Hv6ZDzxgoXGvN98fFm6qYQ==,Pharmacist
 andyadmin,100000:DOufPY3B6qNk4o+/JsSZvg==:ZlNVBrGtDrXfUnZhpDRWzg==,Admin
+anewuser,100000:oSo6s2DaZHUq2ybbra9ZWA==:+JNjk3zKtvIo1vZad5H8eg==,Patient

@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.PharmacistDashboardController">
+<BorderPane prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="project2.PharmacistDashboardController">
+
+    <!-- ===================== TOP ======================= -->
     <top>
-        <VBox alignment="CENTER_LEFT" spacing="6.0" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER_LEFT" spacing="6.0">
             <padding>
-                <Insets bottom="16.0" left="24.0" right="24.0" top="24.0"/>
+                <Insets top="24" left="24" right="24" bottom="16"/>
             </padding>
+
             <children>
                 <Label text="Pharmacist Portal" textFill="#2699a1">
-                    <font>
-                        <Font name="System Bold" size="26.0"/>
-                    </font>
+                    <font><Font name="System Bold" size="26"/></font>
                 </Label>
+
                 <Label text="Welcome,"/>
                 <Label fx:id="pharmacistNameLabel" text="Pharmacist">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
+                    <font><Font size="18"/></font>
                 </Label>
-                <HBox alignment="CENTER_LEFT" spacing="8.0">
+
+                <HBox alignment="CENTER_LEFT" spacing="8">
                     <children>
                         <Label text="User ID:"/>
                         <Label fx:id="pharmacistIdLabel" text="id"/>
@@ -40,42 +36,112 @@
             </children>
         </VBox>
     </top>
+
+
+    <!-- ===================== CENTER ======================= -->
     <center>
-        <VBox spacing="10.0" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets left="24.0" right="24.0"/>
-            </padding>
-            <children>
-                <Label text="Assigned Patients &amp; Medications">
-                    <font>
-                        <Font name="System Bold" size="18.0"/>
-                    </font>
-                </Label>
-                <TableView fx:id="assignmentsTable" prefHeight="420.0">
-                    <columns>
-                        <TableColumn fx:id="patientColumn" prefWidth="220.0" text="Patient Username"/>
-                        <TableColumn fx:id="medicationColumn" prefWidth="320.0" text="Medication"/>
-                        <TableColumn fx:id="quantityColumn" prefWidth="140.0" text="Quantity"/>
-                    </columns>
-                </TableView>
-            </children>
-        </VBox>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20.0">
+                <padding>
+                    <Insets left="24" right="24" top="10" bottom="20"/>
+                </padding>
+
+                <!-- Assignments Table -->
+                <VBox spacing="10.0">
+                    <Label text="Assigned Patients &amp; Medications">
+                        <font><Font name="System Bold" size="18"/></font>
+                    </Label>
+
+                    <TableView fx:id="assignmentsTable" prefHeight="300.0">
+                        <columns>
+                            <TableColumn fx:id="patientColumn" prefWidth="220" text="Patient Username"/>
+                            <TableColumn fx:id="medicationColumn" prefWidth="320" text="Medication"/>
+                            <TableColumn fx:id="quantityColumn" prefWidth="140" text="Quantity"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+
+                <!-- ===================== MY REQUESTS ======================= -->
+                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
+                    <Label text="My Requests" textFill="#2699a1">
+                        <font><Font name="System Bold" size="18.0"/></font>
+                    </Label>
+
+                    <TableView fx:id="myRequestsTable" prefHeight="250.0">
+                        <columns>
+                            <TableColumn fx:id="itemNameColumn" prefWidth="120.0" text="Item Name"/>
+                            <TableColumn fx:id="quantityColumnRequest" prefWidth="80.0" text="Quantity"/>
+                            <TableColumn fx:id="reasonColumn" prefWidth="200.0" text="My Reason"/>
+                            <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status"/>
+                            <TableColumn fx:id="dateColumn" prefWidth="140.0" text="Date"/>
+                            <TableColumn fx:id="notesColumn" prefWidth="200.0" text="Admin Notes"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+
+                <!-- ===================== REQUEST FORM ======================= -->
+                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
+                    <Label text="Submit Inventory Request" textFill="#2699a1">
+                        <font><Font name="System Bold" size="18.0"/></font>
+                    </Label>
+
+                    <GridPane hgap="15.0" vgap="12.0">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="120.0"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Item Name:" GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="requestItemName"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                  editable="true" prefWidth="300"
+                                  promptText="Select or type item name"/>
+
+                        <Label text="Quantity:" GridPane.rowIndex="1"/>
+                        <Spinner fx:id="requestQuantity"
+                                 GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                 editable="true" prefWidth="150"/>
+
+                        <Label text="Reason:" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                            <padding><Insets top="5"/></padding>
+                        </Label>
+                        <TextArea fx:id="requestReason"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                  prefHeight="80" wrapText="true"
+                                  promptText="Explain why this item is needed..."/>
+                    </GridPane>
+
+                    <HBox spacing="10.0">
+                        <Button fx:id="submitRequestButton"
+                                text="Submit Request"
+                                onAction="#submitRequest"
+                                style="-fx-background-color: #2699a1; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
     </center>
+
+
+
+    <!-- ===================== BOTTOM ======================= -->
     <bottom>
-        <HBox alignment="CENTER_LEFT" spacing="12.0" BorderPane.alignment="CENTER_LEFT">
+        <HBox alignment="CENTER_LEFT" spacing="12.0">
             <padding>
-                <Insets bottom="20.0" left="24.0" right="24.0" top="12.0"/>
+                <Insets top="12" left="24" right="24" bottom="20"/>
             </padding>
+
             <children>
-                <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshAssignments" text="Refresh"/>
-                <Button fx:id="viewInventoryButton" mnemonicParsing="false" onAction="#viewInventory"
-                        text="📦 View Inventory" style="-fx-background-color: #2699a1; -fx-text-fill: white;"/>
+                <Button fx:id="refreshButton" text="Refresh" onAction="#refreshAssignments"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="changePasswordButton" text="Change Password" onAction="#goChangePassword"/>
-                <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" text="Log Out"/>
+                <Button fx:id="logoutButton" text="Log Out" onAction="#logout"/>
                 <Button fx:id="btnDeleteMyAccount" text="Delete My Account" onAction="#onDeleteMyAccount"/>
             </children>
         </HBox>
     </bottom>
-</BorderPane>
 
+</BorderPane>

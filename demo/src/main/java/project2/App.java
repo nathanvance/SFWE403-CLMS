@@ -19,8 +19,10 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         System.out.println(App.class.getResource("login.fxml"));
 
-        scene = new Scene(loadFXML("login"), 640, 480);
+        scene = new Scene(loadFXML("login"));
         stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.centerOnScreen();
         stage.show();
     }
 
@@ -30,12 +32,6 @@ public class App extends Application {
 
         // Resize window when switching views (just for Admin)
         javafx.stage.Stage stage = (javafx.stage.Stage) scene.getWindow();
-        if ("adminDashboard".equals(fxml)) {
-            stage.setMinWidth(950);
-            stage.setMinHeight(650);
-        }
-        stage.sizeToScene();     // snap to content’s preferred size
-        stage.centerOnScreen();  // optional
     }
 
     private static Parent loadFXML(String fxml) throws IOException {

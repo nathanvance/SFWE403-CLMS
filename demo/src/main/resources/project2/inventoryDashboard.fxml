@@ -7,138 +7,125 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="project2.InventoryDashboardController">
+<BorderPane prefHeight="700.0" prefWidth="1100.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="project2.InventoryDashboardController">
+
+    <!-- TOP -->
     <top>
-        <VBox alignment="CENTER_LEFT" spacing="8.0" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER_LEFT" spacing="8">
             <padding>
-                <Insets bottom="16.0" left="24.0" right="24.0" top="24.0"/>
+                <Insets top="24" left="24" right="24" bottom="16"/>
             </padding>
             <Label text="Inventory Management Dashboard" textFill="#2699a1">
-                <font>
-                    <Font name="System Bold" size="26.0"/>
-                </font>
+                <font><Font name="System Bold" size="26"/></font>
             </Label>
-            <Label text="View stock levels and submit inventory requests"/>
+            <Label text="View stock levels and review inventory requests"/>
         </VBox>
     </top>
 
+    <!-- CENTER -->
     <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true" BorderPane.alignment="CENTER">
-            <VBox spacing="20.0">
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20">
                 <padding>
-                    <Insets left="24.0" right="24.0" top="10.0" bottom="20.0"/>
+                    <Insets left="24" right="24" top="10" bottom="20"/>
                 </padding>
 
                 <!-- Stock Visualization Section -->
-                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
+                <VBox spacing="12"
+                      style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
                     <Label text="Stock Level Visualization" textFill="#2699a1">
-                        <font>
-                            <Font name="System Bold" size="18.0"/>
-                        </font>
+                        <font><Font name="System Bold" size="18"/></font>
                     </Label>
 
-                    <HBox spacing="15.0" alignment="CENTER_LEFT">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
                         <Label text="Select Item:"/>
-                        <ComboBox fx:id="itemSelector" prefWidth="250.0"/>
+                        <ComboBox fx:id="itemSelector" prefWidth="250"/>
                     </HBox>
 
-                    <HBox spacing="30.0" alignment="CENTER_LEFT">
-                        <VBox spacing="5.0">
+                    <HBox spacing="30" alignment="CENTER_LEFT">
+                        <VBox spacing="5">
                             <Label text="Current Stock:" style="-fx-font-weight: bold;"/>
                             <Label fx:id="currentStockLabel" text="0" style="-fx-font-size: 24px;"/>
                         </VBox>
-                        <VBox spacing="5.0">
+                        <VBox spacing="5">
                             <Label text="Minimum Stock:" style="-fx-font-weight: bold;"/>
                             <Label fx:id="minStockLabel" text="0" style="-fx-font-size: 24px;"/>
                         </VBox>
-                        <VBox spacing="5.0">
+                        <VBox spacing="5">
                             <Label text="Status:" style="-fx-font-weight: bold;"/>
                             <Label fx:id="stockStatusLabel" text="N/A" style="-fx-font-size: 16px;"/>
                         </VBox>
                     </HBox>
 
-                    <LineChart fx:id="stockChart" prefHeight="300.0">
-                        <xAxis>
-                            <NumberAxis fx:id="xAxis" side="BOTTOM"/>
-                        </xAxis>
-                        <yAxis>
-                            <NumberAxis fx:id="yAxis" side="LEFT"/>
-                        </yAxis>
+                    <LineChart fx:id="stockChart" prefHeight="300">
+                        <xAxis><NumberAxis fx:id="xAxis"/></xAxis>
+                        <yAxis><NumberAxis fx:id="yAxis"/></yAxis>
                     </LineChart>
                 </VBox>
 
-                <!-- Request Form Section -->
-                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
-                    <Label text="Submit Inventory Request" textFill="#2699a1">
-                        <font>
-                            <Font name="System Bold" size="18.0"/>
-                        </font>
+                <!-- ===================== PENDING REQUESTS SECTION ====================== -->
+                <VBox spacing="12"
+                      style="-fx-border-color: #ff9800; -fx-border-width: 2; -fx-border-radius: 5; -fx-padding: 15;">
+                    <Label text="⏳ Pending Requests" textFill="#ff9800">
+                        <font><Font name="System Bold" size="20"/></font>
                     </Label>
+                    <Label text="Review and approve/deny pending inventory requests"
+                           textFill="#666666"/>
 
-                    <GridPane hgap="15.0" vgap="12.0">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="NEVER" minWidth="120.0"/>
-                            <ColumnConstraints hgrow="ALWAYS"/>
-                        </columnConstraints>
-
-                        <Label text="Item Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <ComboBox fx:id="requestItemName" editable="true" prefWidth="300.0"
-                                  promptText="Select or type item name"
-                                  GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                        <Label text="Quantity:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <Spinner fx:id="requestQuantity" editable="true" prefWidth="150.0"
-                                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-                        <Label text="Reason:" GridPane.columnIndex="0" GridPane.rowIndex="2" 
-                               GridPane.valignment="TOP">
-                            <padding>
-                                <Insets top="5.0"/>
-                            </padding>
-                        </Label>
-                        <TextArea fx:id="requestReason" promptText="Explain why this item is needed..." 
-                                 prefHeight="80.0" wrapText="true"
-                                 GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                    </GridPane>
-
-                    <HBox spacing="10.0">
-                        <Button fx:id="submitRequestButton" text="Submit Request" onAction="#submitRequest"
-                                style="-fx-background-color: #2699a1; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                    </HBox>
-                </VBox>
-
-                <!-- My Requests Section -->
-                <VBox spacing="12.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
-                    <Label text="My Requests" textFill="#2699a1">
-                        <font>
-                            <Font name="System Bold" size="18.0"/>
-                        </font>
-                    </Label>
-
-                    <TableView fx:id="myRequestsTable" prefHeight="250.0">
+                    <TableView fx:id="pendingRequestsTable" prefHeight="300">
                         <columns>
-                            <TableColumn fx:id="itemNameColumn" prefWidth="120.0" text="Item Name"/>
-                            <TableColumn fx:id="quantityColumn" prefWidth="80.0" text="Quantity"/>
-                            <TableColumn fx:id="reasonColumn" prefWidth="200.0" text="My Reason"/>
-                            <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status"/>
-                            <TableColumn fx:id="dateColumn" prefWidth="140.0" text="Date"/>
-                            <TableColumn fx:id="notesColumn" prefWidth="200.0" text="Admin Notes"/>
+                            <TableColumn fx:id="pharmacistColumn" prefWidth="120" text="Pharmacist"/>
+                            <TableColumn fx:id="itemColumn" prefWidth="120" text="Item Name"/>
+                            <TableColumn fx:id="quantityColumn" prefWidth="80" text="Quantity"/>
+                            <TableColumn fx:id="reasonColumn" prefWidth="250" text="Reason"/>
+                            <TableColumn fx:id="dateColumn" prefWidth="130" text="Request Date"/>
+                            <TableColumn fx:id="actionsColumn" prefWidth="180" text="Actions"/>
                         </columns>
                     </TableView>
                 </VBox>
+
+                <!-- ===================== ALL REQUESTS HISTORY ====================== -->
+                <VBox spacing="12"
+                      style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;">
+                    <Label text="📋 All Requests History" textFill="#2699a1">
+                        <font><Font name="System Bold" size="20"/></font>
+                    </Label>
+                    <Label text="Complete history of all inventory requests" textFill="#666666"/>
+
+                    <TableView fx:id="allRequestsTable" prefHeight="300">
+                        <columns>
+                            <TableColumn fx:id="allPharmacistColumn" prefWidth="110" text="Pharmacist"/>
+                            <TableColumn fx:id="allItemColumn" prefWidth="110" text="Item Name"/>
+                            <TableColumn fx:id="allQuantityColumn" prefWidth="70" text="Quantity"/>
+                            <TableColumn fx:id="allStatusColumn" prefWidth="90" text="Status"/>
+                            <TableColumn fx:id="allDateColumn" prefWidth="130" text="Request Date"/>
+                            <TableColumn fx:id="reviewedByColumn" prefWidth="110" text="Reviewed By"/>
+                            <TableColumn fx:id="adminNotesColumn" prefWidth="220" text="Admin Notes"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
             </VBox>
         </ScrollPane>
     </center>
 
+    <!-- BOTTOM -->
     <bottom>
         <HBox alignment="CENTER_LEFT" spacing="12.0" BorderPane.alignment="CENTER_LEFT">
             <padding>
                 <Insets bottom="20.0" left="24.0" right="24.0" top="12.0"/>
             </padding>
-            <Button fx:id="backButton" text="← Back to Dashboard" onAction="#goBack"/>
-            <Button fx:id="refreshButton" text="🔄 Refresh Data" onAction="#refreshData"/>
+
+            <Button text="Go Back" onAction="#goGoBack"/>
+            <Button text="Change Password" onAction="#goChangePassword"/>
+            <Button text="Log Out" onAction="#logout"/>
+            <Button text="Delete My Account" onAction="#onDeleteMyAccount"/>
+
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </bottom>
+
 </BorderPane>

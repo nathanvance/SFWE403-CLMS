@@ -67,6 +67,7 @@ public class LogInController {
                 switch (role.toLowerCase()) {
                     case "admin"       -> App.setRoot("adminDashboard");
                     case "pharmacist"  -> App.setRoot("pharmacistDashboard");
+                    case "management"  -> App.setRoot("inventoryDashboard");
                     default            -> App.setRoot("patientDashboard");
                 }
             }
